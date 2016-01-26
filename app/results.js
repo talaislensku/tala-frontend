@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './main.css'
 import classNames from 'classnames'
+import Links from './Links'
 
 const Results = ({query, result, current, setCurrent}) => {
 
@@ -8,18 +9,6 @@ const Results = ({query, result, current, setCurrent}) => {
     x.tags.number === current.tags.number &&
     x.tags.article === current.tags.article
   )
-
-  let numberLink = visible && result.forms.filter(x =>
-    x.tags.number !== current.tags.number &&
-    x.tags.article === current.tags.article &&
-    x.tags.grammarCase === current.tags.grammarCase
-  )[0]
-
-  let articleLink = visible && result.forms.filter(x =>
-    x.tags.article !== current.tags.article &&
-    x.tags.number === current.tags.number &&
-    x.tags.grammarCase === current.tags.grammarCase
-  )[0]
 
   let wordClasses = (word) => {
     return classNames({
@@ -36,7 +25,10 @@ const Results = ({query, result, current, setCurrent}) => {
             { current && Object.keys(current.tags).map(tag => <span key={tag}>{current.tags[tag]} </span>) }
           </div>
 
-          <div>{result.headWord} {result.wordClass}</div>
+          <div>
+            <span className={styles.headWord}>{result.headWord}</span>
+            <span className={styles.wordClass}>{result.wordClass}</span>
+          </div>
 
           <div className={styles.entries}>
           { visible.map(x => (
@@ -47,12 +39,7 @@ const Results = ({query, result, current, setCurrent}) => {
           )) }
           </div>
 
-          <div className={styles.links}>
-            {numberLink.tags.number}: <div className={styles.link} onClick={setCurrent.bind(null, numberLink)}>{numberLink.form}</div>
-            {articleLink && articleLink.tags.article}: <div className={styles.link} onClick={setCurrent.bind(null, articleLink)}>{articleLink.form}</div>
-          </div>
-
-          { false && <pre>{JSON.stringify(result, null, 2)}</pre> }
+          <Links result={result} current={current} setCurrent={setCurrent} />
         </div>
       }
     </div>

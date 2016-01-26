@@ -59,6 +59,8 @@ export class Main extends React.Component {
     this.history.listen(location => {
       this.navigate(location.query.q)
     })
+
+    this.refs.search.focus()
   }
 
   render() {

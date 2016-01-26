@@ -67,6 +67,12 @@ body {
   margin: 1em 0;
 }
 
-.wordForm {
+.headWord {
+  font-size: 48px;
+  color: black;
+}
 
+.wordClass {
+  color: rgba(0, 0, 0, .64);
+  margin-left: 1em;
 }
