@@ -1,0 +1,72 @@
+body {
+  font-family: Roboto Slab, serif;
+  font-weight: 300;
+}
+
+.root {
+  margin: 50px auto;
+  max-width: 600px;
+  font-size: 20px;
+}
+
+.search {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #d2d2d2;
+  border-radius: 0;
+  color: rgba(0,0,0,.87);
+  font-family: inherit;
+  font-size: 2pc;
+  outline: 0;
+  padding-bottom: 5px;
+  transition: color .2s, border-color .2s;
+  width: 100%;
+  max-width: 600px;
+}
+
+.currentTags {
+  color: #d2d2d2;
+}
+
+.links {
+  display: flex;
+}
+
+.link {
+  margin-right: 1em;
+  color: blue;
+  border-bottom: 1px solid blue;
+  cursor: pointer;
+}
+
+.word {
+  position: relative;
+  padding: 5px 0;
+  display: flex;
+  flex-flow: row nowrap;
+  margin-left: -220px;
+}
+
+.wordMatch {
+  background-color: yellow;
+
+}
+
+.case {
+  text-align: right;
+  flex: 0 0 200px;
+  font-weight: 700;
+  margin-right: 20px;
+}
+
+.wordMatch .case {
+  background-color: yellow;
+}
+
+.entries {
+  margin: 1em 0;
+}
+
+.wordForm {
+
+}
