@@ -126,4 +126,8 @@ body {
   .links {
     text-align: right;
   }
+
+  .entries {
+    margin-left: -20px;
+  }
 }
