@@ -5,6 +5,8 @@ import { createHistory, useQueries } from 'history'
 import styles from './main.css'
 import Results from './results'
 
+const isMobile = 'ontouchstart' in window
+
 export class Main extends React.Component {
 
   constructor(props) {
@@ -55,8 +57,9 @@ export class Main extends React.Component {
   setCurrent = (current) => {
     this.setState({current, query: current.form})
 
-    // Do this only on desktop
-    // this.refs.search.focus()
+    if (!isMobile) {
+      this.refs.search.focus()
+    }
   };
 
   componentDidMount() {
