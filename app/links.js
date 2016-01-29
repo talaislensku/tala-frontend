@@ -13,7 +13,9 @@ const Links = ({result, current, setCurrent}) => {
     x.tags.grammarCase === current.tags.grammarCase
   )[0]
 
-  numberLink.tag = 'number'
+  if (numberLink) {
+    numberLink.tag = 'number'
+  }
 
   let articleLink = result.forms.filter(x =>
     x.tags.article !== current.tags.article &&
@@ -21,11 +23,13 @@ const Links = ({result, current, setCurrent}) => {
     x.tags.grammarCase === current.tags.grammarCase
   )[0]
 
-  articleLink.tag = 'article'
+  if (articleLink) {
+    articleLink.tag = 'article'
+  }
 
   return (
     <div className={styles.linksSection}>
-      { [numberLink, articleLink].map((link, index) => (
+      { numberLink && articleLink && [numberLink, articleLink].map((link, index) => (
         <div className={styles.links} key={index}>
           <div className={styles.column}>
             <div className={styles.linkCurrent}>{current.tags[link.tag]}</div>

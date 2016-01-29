@@ -5,9 +5,9 @@ import Links from './Links'
 
 const Results = ({query, result, current, setCurrent}) => {
 
-  let visible = result && result.forms.length && result.forms.filter(x =>
-    x.tags.number === current.tags.number &&
-    x.tags.article === current.tags.article
+  let visible = result && current && result.forms.length && result.forms.filter(x =>
+    x && x.tags.number === current.tags.number &&
+    x && x.tags.article === current.tags.article
   )
 
   let wordClasses = (word) => {
