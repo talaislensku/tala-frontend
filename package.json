@@ -4,26 +4,31 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "rm -rf build && webpack --config webpack.production.config",
     "dev": "webpack-dev-server --colors",
-    "test": "npm run test"
+    "test": "npm run test",
+    "deploy": "./deploy.sh"
   },
   "author": "David Blurton",
   "license": "MIT",
   "devDependencies": {
+    "autoprefixer-core": "^6.0.1",
     "babel-core": "^6.4.0",
     "babel-loader": "^6.2.1",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
     "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^1.7.0",
+    "postcss-loader": "^0.8.0",
     "react-hot-loader": "^1.3.0",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.11",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "autoprefixer": "^6.3.1",
     "axios": "^0.8.1",
     "classnames": "^2.2.3",
     "history": "^2.0.0-rc2",
