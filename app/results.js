@@ -13,7 +13,7 @@ const Results = ({query, result, current, setCurrent}) => {
   let wordClasses = (word) => {
     return classNames({
       [styles.word]: true,
-      [styles.wordMatch]: query === word.form
+      [styles.wordMatch]: current === word
     })
   }
 
