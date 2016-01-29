@@ -21,10 +21,6 @@ const Results = ({query, result, current, setCurrent}) => {
     <div>
       { visible &&
         <div>
-          <div className={styles.currentTags}>
-            { current && Object.keys(current.tags).map(tag => <span key={tag}>{current.tags[tag]} </span>) }
-          </div>
-
           <div>
             <span className={styles.headWord}>{result.headWord}</span>
             <span className={styles.wordClass}>{result.wordClass}</span>
@@ -32,7 +28,7 @@ const Results = ({query, result, current, setCurrent}) => {
 
           <div className={styles.entries}>
           { visible.map(x => (
-            <div key={x.grammarTag} className={wordClasses(x)}>
+            <div key={x.grammarTag} className={wordClasses(x)} onClick={setCurrent.bind(null, x)}>
               <div className={styles.case}>{x.tags.grammarCase}</div>
               <div className={styles.wordForm}>{x.form}</div>
             </div>

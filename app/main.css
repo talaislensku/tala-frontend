@@ -1,6 +1,14 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: Roboto Slab, serif;
   font-weight: 300;
+  background-color: #FAFAFA;
+  color: #555;
+  margin: 20px;
 }
 
 .root {
@@ -12,9 +20,8 @@ body {
 .search {
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid #d2d2d2;
+  border-bottom: 1px solid #dbdbdb;
   border-radius: 0;
-  color: rgba(0,0,0,.87);
   font-family: inherit;
   font-size: 2pc;
   outline: 0;
@@ -22,45 +29,66 @@ body {
   transition: color .2s, border-color .2s;
   width: 100%;
   max-width: 600px;
+  color: #555;
 }
 
 .currentTags {
-  color: #d2d2d2;
+  color: #8B999F;
+  margin-bottom: .5em;
 }
 
 .links {
   display: flex;
+  padding: 10px 0;
+  width: 50%;
 }
 
 .link {
-  margin-right: 1em;
-  color: blue;
-  border-bottom: 1px solid blue;
+  color: #1976d2;
+  border-bottom: 1px solid #1976d2;
   cursor: pointer;
+  align-self: flex-end;
+}
+
+.linkCurrent {
+  font-weight: 700;
+  width: 150px;
+}
+
+.linkOther {
+
+}
+
+.columnEnd {
+  align-self: flex-end;
+  margin-left: 1em;
 }
 
 .word {
-  position: relative;
   padding: 5px 0;
   display: flex;
   flex-flow: row nowrap;
-  margin-left: -220px;
+  cursor: pointer;
+  padding-left: 20px;
+  margin-left: -20px;
 }
 
-.wordMatch {
-  background-color: yellow;
+.word:hover {
+  background-color: #F0F5F7;
+}
 
+.wordMatch, .wordMatch:hover {
+  background-color: #1976d2;
+  color: white;
 }
 
 .case {
-  text-align: right;
-  flex: 0 0 200px;
   font-weight: 700;
-  margin-right: 20px;
+  flex: 0 0 50%;
 }
 
 .wordMatch .case {
-  background-color: yellow;
+  background-color: #1976d2;
 }
 
 .entries {
@@ -69,10 +97,33 @@ body {
 
 .headWord {
   font-size: 48px;
-  color: black;
 }
 
 .wordClass {
-  color: rgba(0, 0, 0, .64);
   margin-left: 1em;
+}
+
+.seeAlso {
+  margin-top: 1em;
+}
+
+@media (min-width: 800px) {
+  .linksSection {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .word {
+    margin-left: -220px;
+  }
+
+  .case {
+    text-align: right;
+    margin-right: 20px;
+    flex: 0 0 200px;
+  }
+
+  .links {
+    text-align: right;
+  }
 }

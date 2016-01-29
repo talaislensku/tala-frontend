@@ -13,27 +13,29 @@ const Links = ({result, current, setCurrent}) => {
     x.tags.grammarCase === current.tags.grammarCase
   )[0]
 
+  numberLink.tag = 'number'
+
   let articleLink = result.forms.filter(x =>
     x.tags.article !== current.tags.article &&
     x.tags.number === current.tags.number &&
     x.tags.grammarCase === current.tags.grammarCase
   )[0]
 
-  return (
-    <div className={styles.links}>
-      { numberLink &&
-        <div className={styles.links}>
-          <span>{numberLink.tags.number}:</span>
-          <div className={styles.link} onClick={setCurrent.bind(null, numberLink)}>{numberLink.form}</div>
-        </div>
-      }
+  articleLink.tag = 'article'
 
-      { articleLink &&
-        <div className={styles.links}>
-          <span>{articleLink && articleLink.tags.article}:</span>
-          <div className={styles.link} onClick={setCurrent.bind(null, articleLink)}>{articleLink.form}</div>
+  return (
+    <div className={styles.linksSection}>
+      { [numberLink, articleLink].map((link, index) => (
+        <div className={styles.links} key={index}>
+          <div className={styles.column}>
+            <div className={styles.linkCurrent}>{current.tags[link.tag]}</div>
+            <div className={styles.linkOther}>{link.tags[link.tag]}</div>
+          </div>
+          <div className={styles.columnEnd}>
+            <div className={styles.link} onClick={setCurrent.bind(null, link)}>{link.form}</div>
+          </div>
         </div>
-      }
+      )) }
     </div>
   )
 }

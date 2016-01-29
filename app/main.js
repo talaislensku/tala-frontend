@@ -34,25 +34,29 @@ export class Main extends React.Component {
       return
     }
 
-    axios.get(`http://localhost:8000/related/${query}?lang=en`)
+    axios.get(`https://api.tala.is/related/${query}?lang=en`)
       .then(this.handleResponse)
   };
 
   handleResponse = ({data}) => {
     let noun = data.filter(word => word.wordClass.includes('Noun'))
     let bestMatch = noun.filter(word => word.headWord === this.state.query)[0] || data[0]
+    let otherMatches = data.filter(x => x !== bestMatch)
 
     if (bestMatch) {
       this.setState({
         result: bestMatch,
-        current: bestMatch.forms.filter(x => x && x.form === this.state.query)[0]
+        current: bestMatch.forms.filter(x => x && x.form === this.state.query)[0],
+        otherMatches,
       })
     }
   };
 
   setCurrent = (current) => {
     this.setState({current, query: current.form})
-    this.refs.search.focus()
+
+    // Do this only on desktop
+    // this.refs.search.focus()
   };
 
   componentDidMount() {
@@ -64,12 +68,20 @@ export class Main extends React.Component {
   }
 
   render() {
-    let {query, result, current} = this.state
+    let {query, result, current, otherMatches} = this.state
 
     return (
       <div className={styles.root}>
         <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder="Search for an icelandic word" />
         <Results query={query} result={result} current={current} setCurrent={this.setCurrent} />
+
+        { otherMatches && otherMatches.length ?
+          <div className={styles.seeAlso}>See also:
+          { otherMatches.map(result => {
+            return <div key={result.wordClass}>{result.headWord} {result.wordClass}</div>
+          }) }
+          </div>
+        : null }
       </div>
     )
   }
