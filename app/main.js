@@ -64,6 +64,10 @@ export class Main extends React.Component {
       this.navigate(location.query.q)
     })
 
+    if (!window.location.search) {
+      this.history.push('/?q=hestur')
+    }
+
     this.refs.search.focus()
   }
 
