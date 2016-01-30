@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { createHistory, useQueries } from 'history'
 import styles from './main.css'
 import Results from './results'
+import LanguagePicker from './language-picker'
 
 const isMobile = 'ontouchstart' in window
 
@@ -14,6 +15,7 @@ export class Main extends React.Component {
 
     this.state = {
       query: '',
+      lang: localStorage.getItem('lang') || 'en'
     }
 
     this.history = useQueries(createHistory)()
@@ -36,7 +38,7 @@ export class Main extends React.Component {
       return
     }
 
-    axios.get(`https://api.tala.is/related/${query}?lang=en`)
+    axios.get(`https://api.tala.is/related/${query}?lang=${this.state.lang}`)
       .then(this.handleResponse)
   };
 
@@ -52,6 +54,12 @@ export class Main extends React.Component {
         otherMatches,
       })
     }
+  };
+
+  onLanguageChange = (event) => {
+    let lang = event.target.value
+    localStorage.setItem('lang', lang)
+    this.setState({ lang }, () => this.navigate(this.state.query))
   };
 
   setCurrent = (current) => {
@@ -89,6 +97,8 @@ export class Main extends React.Component {
           }) }
           </div>
         : null }
+
+        <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
       </div>
     )
   }
