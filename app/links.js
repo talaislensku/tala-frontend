@@ -7,33 +7,21 @@ const Links = ({result, current, setCurrent}) => {
     return null
   }
 
-  let numberLink = result.forms.filter(x =>
-    x.tags.number !== current.tags.number &&
-    x.tags.article === current.tags.article &&
-    x.tags.grammarCase === current.tags.grammarCase
-  )[0]
+  const tags = Object.keys(current.tags)
+  const linkTags = tags.filter(x => x !== 'grammarCase')
 
-  if (numberLink) {
-    numberLink.tag = 'number'
-  }
-
-  let articleLink = result.forms.filter(x =>
-    x.tags.article !== current.tags.article &&
-    x.tags.number === current.tags.number &&
-    x.tags.grammarCase === current.tags.grammarCase
-  )[0]
-
-  if (articleLink) {
-    articleLink.tag = 'article'
-  }
+  const links = linkTags.map(tag => result.forms.filter(form => (
+    form.tags[tag] !== current.tags[tag] &&
+    tags.filter(t => t !== tag).every(otherTag => form.tags[otherTag] === current.tags[otherTag])
+  ))[0]).filter(x => x)
 
   return (
     <div className={styles.linksSection}>
-      { numberLink && articleLink && [numberLink, articleLink].map((link, index) => (
+      { links && links.map((link, index) => (
         <div className={styles.links} key={index}>
           <div className={styles.column}>
-            <div className={styles.linkCurrent}>{current.tags[link.tag]}</div>
-            <div className={styles.linkOther}>{link.tags[link.tag]}</div>
+            <div className={styles.linkCurrent}>{current.tags[linkTags[index]]}</div>
+            <div className={styles.linkOther}>{link.tags[linkTags[index]]}</div>
           </div>
           <div className={styles.columnEnd}>
             <div className={styles.link} onClick={setCurrent.bind(null, link)}>{link.form}</div>
