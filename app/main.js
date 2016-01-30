@@ -8,6 +8,8 @@ import LanguagePicker from './language-picker'
 import SeeAlso from './see-also'
 
 const isMobile = 'ontouchstart' in window
+// const api = 'https://api.tala.is'
+const api = 'http://localhost:8000'
 
 export class Main extends React.Component {
 
@@ -39,7 +41,7 @@ export class Main extends React.Component {
       return
     }
 
-    axios.get(`https://api.tala.is/related/${query}?lang=${this.state.lang}`)
+    axios.get(`${api}/related/${query}?lang=${this.state.lang}`)
       .then(this.handleResponse)
   };
 
