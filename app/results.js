@@ -5,10 +5,15 @@ import Links from './Links'
 
 const Results = ({query, result, current, setCurrent}) => {
 
-  let visible = result && current && result.forms.length && result.forms.filter(x =>
-    x && x.tags.number === current.tags.number &&
-    x && x.tags.article === current.tags.article
-  )
+  if (!(result && current && result.forms.length)) {
+    return <div />
+  }
+
+  const tags = Object.keys(current.tags)
+  const otherTags = tags.filter(x => x !== 'grammarCase')
+
+  let visible = result.forms.filter(form => otherTags.every(
+      otherTag => form.tags[otherTag] === current.tags[otherTag]))
 
   let wordClasses = (word) => {
     return classNames({
