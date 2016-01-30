@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './main.css'
 
-const Links = ({result, current, setCurrent}) => {
+const Links = ({result, current, setCurrentForm}) => {
 
   if (!(result && current && result.forms.length)) {
     return null
@@ -27,7 +27,7 @@ const Links = ({result, current, setCurrent}) => {
                   <div className={styles.linkOther}>{link.tags[linkTags[index]]}</div>
                 </div>
                 <div className={styles.columnEnd}>
-                  <div className={styles.link} onClick={setCurrent.bind(null, link)}>{link.form}</div>
+                  <div className={styles.link} onClick={setCurrentForm.bind(null, link)}>{link.form}</div>
                 </div>
               </div>
             )) }
@@ -41,7 +41,7 @@ const Links = ({result, current, setCurrent}) => {
 Links.propTypes = {
   result: React.PropTypes.object,
   current: React.PropTypes.object,
-  setCurrent: React.PropTypes.func.isRequired,
+  setCurrentForm: React.PropTypes.func.isRequired,
 }
 
 export default Links

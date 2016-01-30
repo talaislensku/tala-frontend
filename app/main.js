@@ -5,6 +5,7 @@ import { createHistory, useQueries } from 'history'
 import styles from './main.css'
 import Results from './results'
 import LanguagePicker from './language-picker'
+import SeeAlso from './see-also'
 
 const isMobile = 'ontouchstart' in window
 
@@ -51,6 +52,7 @@ export class Main extends React.Component {
         result: bestMatch,
         current: bestMatch.forms.filter(x => x && x.form === this.state.query)[0],
         otherMatches,
+        data,
       })
     }
   };
@@ -61,12 +63,20 @@ export class Main extends React.Component {
     this.setState({ lang }, () => this.navigate(this.state.query))
   };
 
-  setCurrent = (current) => {
+  setCurrentForm = (current) => {
     this.setState({current, query: current.form})
 
     if (!isMobile) {
       this.refs.search.focus()
     }
+  };
+
+  setCurrent = (result) => {
+    this.setState({
+      result: result,
+      current: result.forms.filter(x => x && x.form === this.state.query)[0],
+      otherMatches: this.state.data.filter(x => x !== result)
+    })
   };
 
   componentDidMount() {
@@ -87,16 +97,8 @@ export class Main extends React.Component {
     return (
       <div className={styles.root}>
         <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder="Search for an icelandic word" autoCapitalize="none" />
-        <Results query={query} result={result} current={current} setCurrent={this.setCurrent} />
-
-        { otherMatches && otherMatches.length ?
-          <div className={styles.seeAlso}>See also:
-          { otherMatches.map(result => {
-            return <div key={result.wordClass}>{result.headWord} {result.wordClass}</div>
-          }) }
-          </div>
-        : null }
-
+        <Results {...this.state} setCurrentForm={this.setCurrentForm} />
+        <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
         <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
       </div>
     )
