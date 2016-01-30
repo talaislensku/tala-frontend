@@ -38,7 +38,7 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new HtmlWebpackPlugin({
       title: 'tala.is',
-      template: 'index.html',
+      template: 'index.dev.html',
       inject: 'body'
     })
   ],
