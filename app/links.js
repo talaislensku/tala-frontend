@@ -19,17 +19,19 @@ const Links = ({result, current, setCurrent}) => {
   return (
     <div className={styles.linksSection}>
       { linkGroups && linkGroups.map((linkGroup, index) => (
-          linkGroup.map((link) => (
-            <div className={styles.links}>
-              <div className={styles.column}>
-                <div className={styles.linkCurrent}>{current.tags[linkTags[index]]}</div>
-                <div className={styles.linkOther}>{link.tags[linkTags[index]]}</div>
+        <div className={styles.linkGroup} key={index}>
+          <div className={styles.linkCurrent}>{current.tags[linkTags[index]]}</div>
+            { linkGroup.map((link) => (
+              <div className={styles.links} key={link.grammarTag}>
+                <div className={styles.column}>
+                  <div className={styles.linkOther}>{link.tags[linkTags[index]]}</div>
+                </div>
+                <div className={styles.columnEnd}>
+                  <div className={styles.link} onClick={setCurrent.bind(null, link)}>{link.form}</div>
+                </div>
               </div>
-              <div className={styles.columnEnd}>
-                <div className={styles.link} onClick={setCurrent.bind(null, link)}>{link.form}</div>
-              </div>
-            </div>
-          ))
+            )) }
+          </div>
         ))
       }
     </div>

@@ -39,8 +39,7 @@ body {
 
 .links {
   display: flex;
-  padding: 10px 0;
-  width: 50%;
+  flex: 1 0 50%;
 }
 
 .link {
@@ -52,10 +51,18 @@ body {
 
 .linkCurrent {
   font-weight: 700;
-  width: 150px;
 }
 
 .linkOther {
+
+}
+
+.linkGroup {
+  margin-bottom: 1em;
+  flex-basis: 50%;
+}
+
+.column {
 
 }
 
@@ -110,7 +117,7 @@ body {
 @media (min-width: 900px) {
   .linksSection {
     display: flex;
-    justify-content: flex-end;
+    flex-wrap: wrap;
   }
 
   .word {
