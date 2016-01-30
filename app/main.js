@@ -87,7 +87,7 @@ export class Main extends React.Component {
 
     return (
       <div className={styles.root}>
-        <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder="Search for an icelandic word" />
+        <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder="Search for an icelandic word" autoCapitalize="none" />
         <Results query={query} result={result} current={current} setCurrent={this.setCurrent} />
 
         { otherMatches && otherMatches.length ?
