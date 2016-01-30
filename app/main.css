@@ -107,7 +107,7 @@ body {
   margin-top: 1em;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 900px) {
   .linksSection {
     display: flex;
     justify-content: flex-end;
