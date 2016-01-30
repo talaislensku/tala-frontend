@@ -43,8 +43,7 @@ export class Main extends React.Component {
   };
 
   handleResponse = ({data}) => {
-    let noun = data.filter(word => word.wordClass.includes('Noun'))
-    let bestMatch = noun.filter(word => word.headWord === this.state.query)[0] || data[0]
+    let bestMatch = data.filter(word => word.headWord === this.state.query)[0] || data[0]
     let otherMatches = data.filter(x => x !== bestMatch)
 
     if (bestMatch) {
