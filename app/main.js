@@ -8,8 +8,7 @@ import LanguagePicker from './language-picker'
 import SeeAlso from './see-also'
 
 const isMobile = 'ontouchstart' in window
-// const api = 'https://api.tala.is'
-const api = 'http://localhost:8000'
+const api = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.tala.is'
 
 export class Main extends React.Component {
 
