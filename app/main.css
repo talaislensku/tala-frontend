@@ -37,37 +37,25 @@ body {
   margin-bottom: .5em;
 }
 
-.links {
-  display: flex;
-  flex: 1 0 50%;
-}
-
 .link {
   color: #1976d2;
   border-bottom: 1px solid #1976d2;
   cursor: pointer;
-  align-self: flex-end;
-}
-
-.linkCurrent {
-  font-weight: 700;
-}
-
-.linkOther {
-
+  display: inline-block;
 }
 
 .linkGroup {
   margin-bottom: 1em;
-  flex-basis: 50%;
+  display: flex;
 }
 
-.column {
-
+.linkCurrent {
+  font-weight: 700;
+  text-align: right;
+  margin-right: 1em;
 }
 
-.columnEnd {
-  align-self: flex-end;
+.linkOther {
   margin-left: 1em;
 }
 
@@ -116,8 +104,7 @@ body {
 
 @media (min-width: 900px) {
   .linksSection {
-    display: flex;
-    flex-wrap: wrap;
+
   }
 
   .word {

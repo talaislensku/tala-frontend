@@ -42,7 +42,7 @@ export class Main extends React.Component {
       verbMode,
     })
 
-    if (!query || query[0] !== this.state.query[0]) {
+    if (!query || (this.state.query && query[0] !== this.state.query[0])) {
       this.setState({
         result: null,
         current: null,

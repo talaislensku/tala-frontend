@@ -10,7 +10,10 @@ const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
   }
 
   const tags = Object.keys(current.tags)
-  const listByTag = tags.includes('grammarCase') ? 'grammarCase' : 'person'
+  const listByTag = tags.includes('grammarCase') ? 'grammarCase' :
+                    tags.includes('person') ? 'person' :
+                    tags.includes('degree') ? 'degree' : null
+
   const otherTags = tags.filter(x => x !== listByTag)
 
   let visible = result.forms.filter(form => otherTags.every(

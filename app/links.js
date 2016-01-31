@@ -3,11 +3,14 @@ import styles from './main.css'
 
 const Links = ({result, current, setCurrentForm}) => {
   if (!(result && current && result.forms.length)) {
-    return null
+    return <div />
   }
 
   const tags = Object.keys(current.tags)
-  const listByTag = tags.includes('grammarCase') ? 'grammarCase' : 'person'
+  const listByTag = tags.includes('grammarCase') ? 'grammarCase' :
+                    tags.includes('person') ? 'person' :
+                    tags.includes('degree') ? 'degree' : null
+
   const linkTags = tags.filter(x => x !== listByTag)
 
   const linkGroups = linkTags.map(tag => result.forms.filter(form => {
@@ -17,23 +20,23 @@ const Links = ({result, current, setCurrentForm}) => {
   })).filter(x => x)
 
   return (
-    <div className={styles.linksSection}>
-      { linkGroups && linkGroups.map((linkGroup, index) => (
+    <div>
+      { linkGroups.map((linkGroup, index) => (
         <div className={styles.linkGroup} key={index}>
-          <div className={styles.linkCurrent}>{current.tags[linkTags[index]]}</div>
-            { linkGroup.map((link) => (
-              <div className={styles.links} key={link.grammarTag}>
-                <div className={styles.column}>
-                  <div className={styles.linkOther}>{link.tags[linkTags[index]]}</div>
-                </div>
-                <div className={styles.columnEnd}>
-                  <div className={styles.link} onClick={setCurrentForm.bind(null, link)}>{link.form}</div>
-                </div>
-              </div>
-            )) }
+          <div>
+            <span className={styles.linkCurrent}>{current.tags[linkTags[index]]}</span>
+            →
           </div>
-        ))
-      }
+          <div>
+            { linkGroup.map((link) => (
+              <div className={styles.linkOther} key={link.grammarTag}>
+                {link.tags[linkTags[index]]}:&nbsp;
+                <span className={styles.link} onClick={setCurrentForm.bind(null, link)}>{link.form}</span>
+              </div>
+              )) }
+          </div>
+        </div>
+      )) }
     </div>
   )
 }
