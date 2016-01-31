@@ -3,3 +3,33 @@
   top: 20px;
   right: 20px;
 }
+
+.select {
+  font-size: 16px;
+  position: relative;
+  display: inline-block;
+}
+
+.select select {
+  outline: none;
+  -webkit-appearance: none;
+  display: block;
+  background: none;
+  border: none;
+  margin: 0;
+  line-height: normal;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  padding-right: 20px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.arrow {
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  font-size: 16px;
+  color: #333;
+}
