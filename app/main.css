@@ -12,9 +12,9 @@ body {
 }
 
 .root {
-  margin: 50px auto;
+  margin: 30px auto;
   max-width: 600px;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .search {
@@ -45,7 +45,7 @@ body {
 }
 
 .linkGroup {
-  margin-bottom: 1em;
+  margin-bottom: .5em;
   display: flex;
 }
 
@@ -66,6 +66,8 @@ body {
   cursor: pointer;
   padding-left: 20px;
   margin-left: -20px;
+  margin-right: -20px;
+  padding-right: 20px;
 }
 
 .word:hover {
@@ -91,7 +93,7 @@ body {
 }
 
 .headWord {
-  font-size: 48px;
+  font-size: 32px;
 }
 
 .wordClass {
@@ -103,8 +105,13 @@ body {
 }
 
 @media (min-width: 900px) {
-  .linksSection {
+  .root {
+    margin: 50px auto;
+    font-size: 20px;
+  }
 
+  .headWord {
+    font-size: 48px;
   }
 
   .word {
