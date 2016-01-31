@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './main.css'
 import classNames from 'classnames'
 import Links from './links'
+import pronounify from './pronounify'
 
 const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
   if (!(result && current && result.forms.length)) {
@@ -9,7 +10,8 @@ const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
   }
 
   const tags = Object.keys(current.tags)
-  const otherTags = tags.filter(x => x !== 'grammarCase')
+  const listByTag = tags.includes('grammarCase') ? 'grammarCase' : 'person'
+  const otherTags = tags.filter(x => x !== listByTag)
 
   let visible = result.forms.filter(form => otherTags.every(
       otherTag => form.tags[otherTag] === current.tags[otherTag]))
@@ -33,7 +35,7 @@ const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
           <div className={styles.entries}>
           { visible.map(x => (
             <div key={x.grammarTag} className={wordClasses(x)} onClick={setCurrentForm.bind(null, x)}>
-              <div className={styles.case}>{x.tags.grammarCase}</div>
+              <div className={styles.case}>{pronounify(x.grammarTag) || x.tags[listByTag]}</div>
               <div className={styles.wordForm}>{x.form}</div>
             </div>
           )) }
