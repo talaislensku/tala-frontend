@@ -7,6 +7,8 @@ import Results from './results'
 import LanguagePicker from './language-picker'
 import SeeAlso from './see-also'
 import Suggestions from './suggestions'
+import Logo from './logo'
+import Footer from './footer'
 
 const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.tala.is'
@@ -144,11 +146,15 @@ export class Main extends React.Component {
 
     return (
       <div className={styles.root}>
-        <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder="Search for an icelandic word" autoCapitalize="none" />
-        <Results {...this.state} setCurrentForm={this.setCurrentForm} />
-        <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
-        <Suggestions suggestions={suggestions} navigate={this.navigate} />
-        <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
+        <div className={styles.content}>
+          <Logo />
+          <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder="Search for an icelandic word" autoCapitalize="none" />
+          <Results {...this.state} setCurrentForm={this.setCurrentForm} />
+          <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
+          <Suggestions suggestions={suggestions} navigate={this.navigate} />
+          <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
+        </div>
+        <Footer />
       </div>
     )
   }

@@ -1,0 +1,16 @@
+.root {
+  margin: 20px 0;
+  color: color($black a(50%));
+  text-align: center;
+  font-size: 12px;
+}
+
+.root p {
+  margin-bottom: .5em;
+}
+
+.root a {
+  color: color($black a(50%));
+  border-bottom: 1px dotted $border;
+  text-decoration: none;
+}

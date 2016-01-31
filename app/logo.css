@@ -1,0 +1,25 @@
+.root {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 20px;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+.root a {
+  text-decoration: none;
+  color: $black;
+}
+
+.root em {
+  font-style: normal;
+  color: $blue
+}
+
+@media (min-width: 900px) {
+  .root {
+    font-size: 28px;
+    text-align: center;
+  }
+}

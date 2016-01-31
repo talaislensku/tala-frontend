@@ -1,7 +1,8 @@
-var webpack = require('webpack');
-var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var webpack = require('webpack')
+var path = require('path')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var brand = require('./app/brand')
 
 var cssModulesLoader = 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
 
@@ -35,7 +36,10 @@ module.exports = {
   },
 
   postcss: [
-    require('autoprefixer')
+    require('autoprefixer'),
+    require('postcss-simple-vars')({variables: brand}),
+    require('postcss-color-function'),
+    require('postcss-calc')
   ],
 
   plugins: [

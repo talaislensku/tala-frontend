@@ -1,35 +1,51 @@
 * {
-  margin: 0;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  font-family: Roboto Slab, serif;
-  font-weight: 300;
   background-color: #fff;
-  color: #555;
-  margin: 20px;
+  color: $black;
+  font-family: 'Roboto Slab', serif;
+  font-weight: 300;
+  line-height: 1.4;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: none;
 }
 
 .root {
-  margin: 30px auto;
-  max-width: 600px;
   font-size: 16px;
+
+  /* sticky footer */
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  flex: 1;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 700px;
+  padding: 0 20px;
 }
 
 .search {
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid $border;
   border-radius: 0;
   font-family: inherit;
-  font-size: 2pc;
+  font-size: 1.5rem;
   outline: 0;
   padding-bottom: 5px;
   transition: color .2s, border-color .2s;
   width: 100%;
   max-width: 600px;
   color: #555;
+  margin-bottom: .5em;
 }
 
 .currentTags {
@@ -71,21 +87,23 @@ body {
 }
 
 .word:hover {
-  background-color: #F0F5F7;
+  background-color: color($blue a(10%));
 }
 
 .wordMatch, .wordMatch:hover {
-  background-color: #1976d2;
+  background-color: $blue;
   color: white;
 }
 
 .case {
-  font-weight: 700;
   flex: 0 0 50%;
+  font-weight: 700;
+  padding-right: 20px;
+  text-align: right;
 }
 
 .wordMatch .case {
-  background-color: #1976d2;
+  background-color: $blue;
 }
 
 .entries {
@@ -93,7 +111,7 @@ body {
 }
 
 .headWord {
-  font-size: 32px;
+  font-size: 2rem;
 }
 
 .wordClass {
@@ -106,21 +124,19 @@ body {
 
 @media (min-width: 900px) {
   .root {
-    margin: 50px auto;
+    padding: 50px 0;
     font-size: 20px;
   }
 
   .headWord {
-    font-size: 48px;
+    font-size: 2.5rem;
   }
 
   .word {
-    margin-left: -220px;
+    margin-left: -200px;
   }
 
   .case {
-    text-align: right;
-    margin-right: 20px;
     flex: 0 0 200px;
   }
 

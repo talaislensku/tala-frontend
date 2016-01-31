@@ -1,8 +1,9 @@
 var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var brand = require('./app/brand')
 
-var cssModulesLoader = 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+var cssModulesLoader = 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -32,6 +33,13 @@ module.exports = {
       }
     ],
   },
+
+  postcss: [
+    require('autoprefixer'),
+    require('postcss-simple-vars')({variables: brand}),
+    require('postcss-color-function'),
+    require('postcss-calc')
+  ],
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
