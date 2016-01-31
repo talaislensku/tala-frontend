@@ -35,7 +35,14 @@ export class Main extends React.Component {
   };
 
   navigate = (query) => {
-    this.setState({query})
+    let verbMode = query.startsWith('að ')
+
+    this.setState({
+      query,
+      verbMode,
+    })
+
+    query = query.replace('að ', '')
 
     if (!query) {
       return
@@ -46,13 +53,28 @@ export class Main extends React.Component {
   };
 
   handleResponse = ({data}) => {
-    let bestMatch = data.filter(word => word.headWord === this.state.query)[0] || data[0]
+    let bestMatch
+
+    if (this.state.verbMode) {
+      bestMatch = data.filter(word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð')[0]
+    } else {
+      bestMatch = data.filter(word => word.headWord === this.state.query)[0] || data[0]
+    }
+
     let otherMatches = data.filter(x => x !== bestMatch)
+
+    let current
+
+    if (this.state.verbMode) {
+      current = bestMatch.forms.filter(x => x.grammarTag.includes('NT-1P-ET'))[0]
+    } else {
+      current = bestMatch.forms.filter(x => x && x.form === this.state.query)[0]
+    }
 
     if (bestMatch) {
       this.setState({
         result: bestMatch,
-        current: bestMatch.forms.filter(x => x && x.form === this.state.query)[0],
+        current,
         otherMatches,
         data,
       })
