@@ -2,13 +2,13 @@ import React from 'react'
 import styles from './main.css'
 
 const Links = ({result, current, setCurrentForm}) => {
-
   if (!(result && current && result.forms.length)) {
     return null
   }
 
   const tags = Object.keys(current.tags)
-  const linkTags = tags.filter(x => x !== 'grammarCase')
+  const listByTag = tags.includes('grammarCase') ? 'grammarCase' : 'person'
+  const linkTags = tags.filter(x => x !== listByTag)
 
   const linkGroups = linkTags.map(tag => result.forms.filter(form => {
     const otherTags = tags.filter(t => t !== tag)
