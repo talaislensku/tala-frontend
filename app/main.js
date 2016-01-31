@@ -6,6 +6,7 @@ import styles from './main.css'
 import Results from './results'
 import LanguagePicker from './language-picker'
 import SeeAlso from './see-also'
+import Suggestions from './suggestions'
 
 const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.tala.is'
@@ -41,7 +42,14 @@ export class Main extends React.Component {
       verbMode,
     })
 
-    if (!query) {
+    if (!query || query[0] !== this.state.query[0]) {
+      this.setState({
+        result: null,
+        current: null,
+        otherMatches: null,
+        suggestions: null,
+      })
+
       return
     }
 
@@ -51,8 +59,24 @@ export class Main extends React.Component {
       .then(this.handleResponse)
   };
 
+  getSuggestions = (query) => {
+    return axios.get(`${api}/suggestions/${query}`)
+        .then(({data}) => {
+          if (data.length > 0) {
+            this.setState({
+              suggestions: data
+            })
+          }
+        })
+  };
+
   handleResponse = ({data}) => {
     let bestMatch
+
+    if (data.length === 0) {
+      this.getSuggestions(this.state.query)
+      return
+    }
 
     if (this.state.verbMode) {
       bestMatch = data.filter(word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð')[0]
@@ -65,9 +89,9 @@ export class Main extends React.Component {
     let current
 
     if (this.state.verbMode) {
-      current = bestMatch.forms.filter(x => x.grammarTag.includes('NT-1P-ET'))[0]
+      current = bestMatch && bestMatch.forms.filter(x => x.grammarTag.includes('NT-1P-ET'))[0]
     } else {
-      current = bestMatch.forms.filter(x => x && x.form === this.state.query)[0]
+      current = bestMatch && bestMatch.forms.filter(x => x && x.form === this.state.query)[0]
     }
 
     if (bestMatch) {
@@ -76,6 +100,7 @@ export class Main extends React.Component {
         current,
         otherMatches,
         data,
+        suggestions: []
       })
     }
   };
@@ -115,13 +140,14 @@ export class Main extends React.Component {
   }
 
   render() {
-    let {query, result, current, otherMatches} = this.state
+    let {query, result, current, otherMatches, suggestions} = this.state
 
     return (
       <div className={styles.root}>
         <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder="Search for an icelandic word" autoCapitalize="none" />
         <Results {...this.state} setCurrentForm={this.setCurrentForm} />
         <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
+        <Suggestions suggestions={suggestions} navigate={this.navigate} />
         <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
       </div>
     )
