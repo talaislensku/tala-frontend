@@ -34,18 +34,18 @@ export class Main extends React.Component {
   };
 
   navigate = (query) => {
-    let verbMode = query.startsWith('að ')
+    let verbMode = query && query.startsWith('að ')
 
     this.setState({
       query,
       verbMode,
     })
 
-    query = query.replace('að ', '')
-
     if (!query) {
       return
     }
+
+    query = query.replace('að ', '')
 
     axios.get(`${api}/related/${query}?lang=${this.state.lang}`)
       .then(this.handleResponse)
