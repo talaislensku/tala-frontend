@@ -5,7 +5,7 @@ export default ({suggestions, navigate}) => (
   suggestions && suggestions.length ?
     <div className={styles.seeAlso}>Did you mean:
     { suggestions.map(suggestion => {
-      return <div key={suggestion} className={styles.links}>
+      return <div key={suggestion}>
         <div className={styles.link} onClick={navigate.bind(null, suggestion)}>{suggestion}</div>
       </div>
     }) }
