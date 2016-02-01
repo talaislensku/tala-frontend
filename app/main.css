@@ -12,9 +12,6 @@ body {
   line-height: 1.4;
   text-rendering: optimizeLegibility;
   text-size-adjust: none;
-  -webkit-tap-highlight-color: transparent;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
 }
 
 .root {
