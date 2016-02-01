@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 import { createHistory, useQueries } from 'history'
+import debounce from 'debounce'
 import styles from './main.css'
 import Results from './results'
 import LanguagePicker from './language-picker'
@@ -24,6 +25,7 @@ export class Main extends React.Component {
     }
 
     this.history = useQueries(createHistory)()
+    this.getSuggestionsDebounced = debounce(this.getSuggestions, 500)
   }
 
   queryChanged = (event) => {
@@ -44,7 +46,7 @@ export class Main extends React.Component {
       verbMode,
     })
 
-    if (!query || (this.state.query && query[0] !== this.state.query[0])) {
+    if (!query) {
       this.setState({
         result: null,
         current: null,
@@ -64,7 +66,7 @@ export class Main extends React.Component {
   getSuggestions = (query) => {
     return axios.get(`${api}/suggestions/${query}`)
         .then(({data}) => {
-          if (data.length > 0) {
+          if (data.length > 0 && !this.state.result) {
             this.setState({
               suggestions: data
             })
@@ -76,7 +78,7 @@ export class Main extends React.Component {
     let bestMatch
 
     if (data.length === 0) {
-      this.getSuggestions(this.state.query)
+      this.getSuggestionsDebounced(this.state.query)
       return
     }
 
