@@ -11,7 +11,11 @@ const Links = ({result, current, setCurrentForm}) => {
                     tags.includes('person') ? 'person' :
                     tags.includes('degree') ? 'degree' : null
 
-  const linkTags = tags.filter(x => x !== listByTag)
+  let linkTags = tags.filter(x => x !== listByTag)
+
+  if (listByTag === 'person') {
+    linkTags = linkTags.filter(x => x !== 'number')
+  }
 
   const linkGroups = linkTags.map(tag => result.forms.filter(form => {
     const otherTags = tags.filter(t => t !== tag)

@@ -14,7 +14,11 @@ const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
                     tags.includes('person') ? 'person' :
                     tags.includes('degree') ? 'degree' : null
 
-  const otherTags = tags.filter(x => x !== listByTag)
+  let otherTags = tags.filter(x => x !== listByTag)
+
+  if (listByTag === 'person') {
+    otherTags = otherTags.filter(x => x !== 'number')
+  }
 
   let visible = result.forms.filter(form => otherTags.every(
       otherTag => form.tags[otherTag] === current.tags[otherTag]))
