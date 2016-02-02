@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf build && webpack --config webpack.production.config",
+    "build": "rm -rf build && webpack --config webpack.production.config --bail",
     "dev": "webpack-dev-server --colors",
     "test": "npm run test",
     "deploy": "./deploy.sh"
