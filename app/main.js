@@ -49,7 +49,9 @@ export class Main extends React.Component {
       verbMode,
     })
 
-    if (!query) {
+    // Clear search results if new query doesn't match any current results
+
+    if (!query || this.state.query && query[0] !== this.state.query[0]) {
       this.setState({
         result: null,
         current: null,
@@ -63,6 +65,10 @@ export class Main extends React.Component {
     }
 
     query = query.replace('að ', '')
+
+    if (!query) {
+      return
+    }
 
     axios.get(`${api}/related/${query}?lang=${this.state.lang}`)
       .then(this.handleResponse)
