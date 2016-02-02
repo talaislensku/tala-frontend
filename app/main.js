@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 import { createHistory, useQueries } from 'history'
-import debounce from 'debounce'
+import debounce from 'lodash.debounce'
 import { TranslatorProvider } from "react-translate"
 
 import styles from './main.css'
@@ -56,6 +56,8 @@ export class Main extends React.Component {
         otherMatches: null,
         suggestions: null,
       })
+
+      this.getSuggestionsDebounced.cancel()
 
       return
     }
