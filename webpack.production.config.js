@@ -31,6 +31,9 @@ module.exports = {
       }, {
         test: /\.svg$/,
         loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+      }, {
+        test: /\.yaml$/,
+        loader: 'json-loader!yaml-loader'
       }
     ]
   },
