@@ -1,0 +1,14 @@
+en:
+  locale: en
+  ui:
+    search-for-an-icelandic-word: 'Search for an icelandic word'
+    did-you-mean: 'Did you mean'
+    see-also: 'See also'
+
+is:
+  locale: is
+  ui:
+    search-for-an-icelandic-word: 'Leita að íslensku orði'
+    did-you-mean: 'Áttirðu við'
+    see-also: 'Sjá einnig'
+

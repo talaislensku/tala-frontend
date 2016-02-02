@@ -30,6 +30,9 @@ module.exports = {
       }, {
         test: /\.css$/,
         loader: 'style-loader!' + cssModulesLoader
+      }, {
+        test: /\.yaml$/,
+        loader: 'json-loader!yaml-loader'
       }
     ],
   },

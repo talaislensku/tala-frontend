@@ -3,6 +3,8 @@ import axios from 'axios'
 import classNames from 'classnames'
 import { createHistory, useQueries } from 'history'
 import debounce from 'debounce'
+import { TranslatorProvider } from "react-translate"
+
 import styles from './main.css'
 import Results from './results'
 import LanguagePicker from './language-picker'
@@ -10,6 +12,7 @@ import SeeAlso from './see-also'
 import Suggestions from './suggestions'
 import Logo from './logo'
 import Footer from './footer'
+import translations from '../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.tala.is'
@@ -145,19 +148,22 @@ export class Main extends React.Component {
 
   render() {
     let {query, result, current, otherMatches, suggestions} = this.state
+    const t = translations[this.state.lang]
 
     return (
-      <div className={styles.root}>
-        <div className={styles.content}>
-          <Logo />
-          <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder="Search for an icelandic word" autoCapitalize="none" />
-          <Results {...this.state} setCurrentForm={this.setCurrentForm} />
-          <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
-          <Suggestions suggestions={suggestions} navigate={this.navigate} />
-          <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
+      <TranslatorProvider translations={t}>
+        <div className={styles.root}>
+          <div className={styles.content}>
+            <Logo />
+            <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder={t.ui['search-for-an-icelandic-word']} autoCapitalize="none" />
+            <Results {...this.state} setCurrentForm={this.setCurrentForm} />
+            <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
+            <Suggestions suggestions={suggestions} navigate={this.navigate} />
+            <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </TranslatorProvider>
     )
   }
 }
