@@ -106,6 +106,10 @@ body {
   background-color: $blue;
 }
 
+.alternate .case {
+  color: transparent;
+}
+
 .entries {
   margin: 1em 0;
 }
@@ -133,11 +137,11 @@ body {
   }
 
   .word {
-    margin-left: -200px;
+    margin-left: -210px;
   }
 
   .case {
-    flex: 0 0 200px;
+    flex: 0 0 210px;
   }
 
   .links {

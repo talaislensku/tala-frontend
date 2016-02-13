@@ -17,8 +17,15 @@ import translations from '../translations.yaml'
 const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.tala.is'
 
-export class Main extends React.Component {
+function getBestMatch(data, query) {
+  return data.filter(word => word.headWord === query)[0] || data[0]
+}
 
+function getMatchingForm(match, query) {
+  return match && match.forms.filter(x => x && x.form === query)[0]
+}
+
+export class Main extends React.Component {
   constructor(props) {
     super(props)
 
@@ -48,6 +55,7 @@ export class Main extends React.Component {
 
     if (!query) {
       this.clearResults()
+      this.getSuggestionsDebounced.cancel()
       return
     }
 
@@ -57,11 +65,11 @@ export class Main extends React.Component {
 
   getSuggestions = (query) => {
     return axios.get(`${api}/suggestions/${query}`)
-        .then(({data}) => {
-          this.setState({
-            suggestions: data
-          })
+      .then(({data}) => {
+        this.setState({
+          suggestions: data
         })
+      })
   };
 
   clearResults = () => {
@@ -74,17 +82,19 @@ export class Main extends React.Component {
   };
 
   handleResponse = ({data}) => {
+    const query = this.state.query
+
     if (data.length === 0) {
       // check if query matches start of a result
 
-      this.getSuggestionsDebounced(this.state.query)
+      this.getSuggestionsDebounced(query)
       this.clearResults()
       return
     }
 
-    let bestMatch = data.filter(word => word.headWord === this.state.query)[0] || data[0]
+    let bestMatch = getBestMatch(data, query)
     let otherMatches = data.filter(x => x !== bestMatch)
-    let current = bestMatch && bestMatch.forms.filter(x => x && x.form === this.state.query)[0]
+    let current = getMatchingForm(bestMatch, query)
 
     if (bestMatch) {
       this.getSuggestionsDebounced.cancel()
@@ -115,7 +125,7 @@ export class Main extends React.Component {
   setCurrent = (result) => {
     this.setState({
       result: result,
-      current: result.forms.filter(x => x && x.form === this.state.query)[0],
+      current: getMatchingForm(result, this.state.query),
       otherMatches: this.state.data.filter(x => x !== result)
     })
   };
