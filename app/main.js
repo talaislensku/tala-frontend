@@ -21,8 +21,12 @@ function getBestMatch(data, query) {
   return data.filter(word => word.headWord === query)[0] || data[0]
 }
 
-function getMatchingForm(match, query) {
-  return match && match.forms.filter(x => x && x.form === query)[0]
+function getBestFormMatch(match, query) {
+  return match && match.forms.filter(x => x.form === query)[0]
+}
+
+function getMatchingForm(match, tag) {
+  return match && match.forms.filter(x => x.grammarTag === tag)[0]
 }
 
 export class Main extends React.Component {
@@ -48,7 +52,7 @@ export class Main extends React.Component {
     })
   };
 
-  navigate = (query) => {
+  navigate = ({q: query, id, tag}) => {
     this.setState({
       query,
     })
@@ -62,7 +66,7 @@ export class Main extends React.Component {
     // fetch new data only if no matches
 
     axios.get(`${api}/related/${query}?lang=${this.state.lang}`)
-      .then(this.handleResponse)
+      .then(res => this.handleResponse(res, {query, id, tag}))
   };
 
   getSuggestions = (query) => {
@@ -83,9 +87,7 @@ export class Main extends React.Component {
     })
   };
 
-  handleResponse = ({data}) => {
-    const query = this.state.query
-
+  handleResponse = ({data}, {query, id, tag}) => {
     if (data.length === 0) {
       // check if query matches start of a result
 
@@ -94,9 +96,9 @@ export class Main extends React.Component {
       return
     }
 
-    let bestMatch = getBestMatch(data, query)
+    let bestMatch = data.filter(d => d.binId === Number(id))[0] || getBestMatch(data, query)
     let otherMatches = data.filter(x => x !== bestMatch)
-    let current = getMatchingForm(bestMatch, query)
+    let current = getMatchingForm(bestMatch, tag) || getBestFormMatch(bestMatch, query)
 
     if (bestMatch) {
       this.getSuggestionsDebounced.cancel()
@@ -120,6 +122,8 @@ export class Main extends React.Component {
     this.history.replace({
       query: {
         q: current.form,
+        id: this.state.result.binId,
+        tag: current.grammarTag,
       }
     })
 
@@ -129,16 +133,17 @@ export class Main extends React.Component {
   };
 
   setCurrent = (result) => {
-    this.setState({
-      result: result,
-      current: getMatchingForm(result, this.state.query),
-      otherMatches: this.state.data.filter(x => x !== result)
+    this.history.replace({
+      query: {
+        q: this.state.query,
+        id: result.binId,
+      }
     })
   };
 
   componentDidMount() {
     this.history.listen(location => {
-      this.navigate(location.query.q)
+      this.navigate(location.query)
     })
 
     if (!window.location.search) {
