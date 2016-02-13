@@ -141,6 +141,14 @@ export class Main extends React.Component {
     })
   };
 
+  setSuggestion = (suggestion) => {
+    this.history.replace({
+      query: {
+        q: suggestion,
+      }
+    })
+  };
+
   componentDidMount() {
     this.history.listen(location => {
       this.navigate(location.query)
@@ -165,7 +173,7 @@ export class Main extends React.Component {
             <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder={t.ui['search-for-an-icelandic-word']} autoCapitalize="none" />
             <Results {...this.state} setCurrentForm={this.setCurrentForm} />
             <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
-            <Suggestions suggestions={suggestions} navigate={this.navigate} />
+            <Suggestions suggestions={suggestions} navigate={this.setSuggestion} />
             <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
           </div>
           <Footer />
