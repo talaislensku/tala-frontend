@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import classNames from 'classnames'
 import { createHistory, useQueries } from 'history'
-import debounce from 'debounce'
+import debounce from 'lodash.debounce'
 import { TranslatorProvider } from "react-translate"
 
 import styles from './main.css'
@@ -42,25 +42,14 @@ export class Main extends React.Component {
   };
 
   navigate = (query) => {
-    let verbMode = query && query.startsWith('að ')
-
     this.setState({
       query,
-      verbMode,
     })
 
     if (!query) {
-      this.setState({
-        result: null,
-        current: null,
-        otherMatches: null,
-        suggestions: null,
-      })
-
+      this.clearResults()
       return
     }
-
-    query = query.replace('að ', '')
 
     axios.get(`${api}/related/${query}?lang=${this.state.lang}`)
       .then(this.handleResponse)
@@ -69,39 +58,36 @@ export class Main extends React.Component {
   getSuggestions = (query) => {
     return axios.get(`${api}/suggestions/${query}`)
         .then(({data}) => {
-          if (data.length > 0 && !this.state.result) {
-            this.setState({
-              suggestions: data
-            })
-          }
+          this.setState({
+            suggestions: data
+          })
         })
   };
 
-  handleResponse = ({data}) => {
-    let bestMatch
+  clearResults = () => {
+    this.setState({
+      result: null,
+      current: null,
+      otherMatches: null,
+      suggestions: null,
+    })
+  };
 
+  handleResponse = ({data}) => {
     if (data.length === 0) {
+      // check if query matches start of a result
+
       this.getSuggestionsDebounced(this.state.query)
+      this.clearResults()
       return
     }
 
-    if (this.state.verbMode) {
-      bestMatch = data.filter(word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð')[0]
-    } else {
-      bestMatch = data.filter(word => word.headWord === this.state.query)[0] || data[0]
-    }
-
+    let bestMatch = data.filter(word => word.headWord === this.state.query)[0] || data[0]
     let otherMatches = data.filter(x => x !== bestMatch)
-
-    let current
-
-    if (this.state.verbMode) {
-      current = bestMatch && bestMatch.forms.filter(x => x.grammarTag.includes('NT-1P-ET'))[0]
-    } else {
-      current = bestMatch && bestMatch.forms.filter(x => x && x.form === this.state.query)[0]
-    }
+    let current = bestMatch && bestMatch.forms.filter(x => x && x.form === this.state.query)[0]
 
     if (bestMatch) {
+      this.getSuggestionsDebounced.cancel()
       this.setState({
         result: bestMatch,
         current,
