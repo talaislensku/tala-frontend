@@ -59,6 +59,8 @@ export class Main extends React.Component {
       return
     }
 
+    // fetch new data only if no matches
+
     axios.get(`${api}/related/${query}?lang=${this.state.lang}`)
       .then(this.handleResponse)
   };
@@ -115,7 +117,11 @@ export class Main extends React.Component {
   };
 
   setCurrentForm = (current) => {
-    this.setState({current, query: current.form})
+    this.history.replace({
+      query: {
+        q: current.form,
+      }
+    })
 
     if (!isMobile) {
       this.refs.search.focus()
