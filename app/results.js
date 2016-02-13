@@ -27,7 +27,7 @@ const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
     return classNames({
       [styles.word]: true,
       [styles.wordMatch]: current === word,
-      [styles.alternate]: word.grammarTag.includes('2')
+      [styles.alternate]: word.grammarTag.endsWith('2')
     })
   }
 
