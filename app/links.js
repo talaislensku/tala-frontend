@@ -29,7 +29,7 @@ const Links = ({result, current, setCurrentForm}) => {
         <div className={styles.linkGroup} key={index}>
           <div>
             <span className={styles.linkCurrent}>{current.tags[linkTags[index]]}</span>
-            →
+            { linkGroup.length > 0 ? '→' : null }
           </div>
           <div>
             { linkGroup.map((link) => (
