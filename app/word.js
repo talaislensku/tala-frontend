@@ -62,6 +62,8 @@ export default class Word extends React.Component {
 
     }
 
+    this.onChange = this.props.onChange.bind(null, props.query)
+
     this.getSuggestionsDebounced = debounce(this.getSuggestions, 500)
   }
 
@@ -130,7 +132,7 @@ export default class Word extends React.Component {
   };
 
   setCurrentForm = (current) => {
-    this.props.onChange({
+    this.onChange({
       query: {
         q: current.form,
         id: this.state.result.binId,
@@ -140,7 +142,7 @@ export default class Word extends React.Component {
   };
 
   setCurrent = (result) => {
-    this.props.onChange({
+    this.onChange({
       query: {
         q: this.props.query,
         id: result.binId,
@@ -149,7 +151,7 @@ export default class Word extends React.Component {
   };
 
   setSuggestion = (suggestion) => {
-    this.props.onChange({
+    this.onChange({
       query: {
         q: suggestion,
       }
@@ -161,6 +163,8 @@ export default class Word extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    this.onChange = this.props.onChange.bind(null, props.query)
+
     this.navigate({q: props.query})
   }
 

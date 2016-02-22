@@ -44,8 +44,14 @@ export class Main extends React.Component {
     this.setState({ lang }, () => this.navigate({q: this.state.query}))
   };
 
-  onWordChange = (word) => {
-    this.history.replace(word)
+  onWordChange = (oldWord, newWord) => {
+    var query = this.state.query.replace(oldWord, newWord.query.q)
+
+    this.history.replace({
+      query: {
+        q: query
+      }
+    })
 
     if (!isMobile) {
       this.refs.search.focus()
@@ -80,7 +86,13 @@ export class Main extends React.Component {
           <div className={styles.content}>
             <Logo />
             <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder={t.ui['search-for-an-icelandic-word']} autoCapitalize="none" />
-            <Word query={query} lang={lang} onChange={this.onWordChange} />
+
+            <div className={styles.words}>
+              { query.split(' ').map(word => (
+                <Word query={word} lang={lang} onChange={this.onWordChange} />
+              ))}
+            </div>
+
             <LanguagePicker lang={lang} onChange={this.onLanguageChange} />
           </div>
           <Footer />

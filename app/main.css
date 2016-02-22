@@ -75,6 +75,10 @@ body {
   margin-left: 1em;
 }
 
+.words {
+  display: flex;
+}
+
 .word {
   padding: 5px 0;
   display: flex;
