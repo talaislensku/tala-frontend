@@ -39,6 +39,29 @@ function getMatchingForm(match, tag) {
   return match && match.forms.filter(x => x.grammarTag === tag)[0]
 }
 
+const lookupWord = (function() {
+  let current;
+
+  function getWord(word, lang) {
+    current = word
+
+    let promise = new Promise((resolve, reject) => {
+      axios.get(`${api}/find/${word}?lang=${lang}`)
+        .then(result => {
+          if (promise.word === current) {
+            resolve(result)
+          }
+        })
+    })
+
+    promise.word = word
+
+    return promise
+  }
+
+  return getWord
+})()
+
 export class Main extends React.Component {
   constructor(props) {
     super(props)
@@ -75,7 +98,7 @@ export class Main extends React.Component {
 
     // fetch new data only if no matches
 
-    axios.get(`${api}/find/${query}?lang=${this.state.lang}`)
+    lookupWord(query, this.state.lang)
       .then(res => this.handleResponse(res, {query, id, tag}))
   };
 
@@ -98,6 +121,10 @@ export class Main extends React.Component {
   };
 
   handleResponse = ({data}, {query, id, tag}) => {
+    if (!data) {
+      return
+    }
+
     if (data.length === 0) {
       // check if query matches start of a result
 
