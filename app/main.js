@@ -18,14 +18,24 @@ const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.tala.is'
 
 function getBestMatch(data, query) {
-  return data.filter(word => word.headWord === query)[0] || data[0]
+  return data.filter(word => word.headWord === query)[0] ||
+    data.filter(word => word.forms.some(form => form.form === query))[0] ||
+    data[0]
 }
 
 function getBestFormMatch(match, query) {
-  return match && match.forms.filter(x => x.form === query)[0]
+  if (!(match && match.forms)) {
+    return {}
+  }
+
+  return match && match.forms.filter(x => x.form.toLowerCase() === query.toLowerCase())[0]
 }
 
 function getMatchingForm(match, tag) {
+  if (!(match && match.forms)) {
+    return {}
+  }
+
   return match && match.forms.filter(x => x.grammarTag === tag)[0]
 }
 
@@ -65,7 +75,7 @@ export class Main extends React.Component {
 
     // fetch new data only if no matches
 
-    axios.get(`${api}/related/${query}?lang=${this.state.lang}`)
+    axios.get(`${api}/find/${query}?lang=${this.state.lang}`)
       .then(res => this.handleResponse(res, {query, id, tag}))
   };
 
@@ -96,7 +106,7 @@ export class Main extends React.Component {
       return
     }
 
-    let bestMatch = data.filter(d => d.binId === Number(id))[0] || getBestMatch(data, query)
+    let bestMatch = data.filter(d => d.binId == id)[0] || getBestMatch(data, query)
     let otherMatches = data.filter(x => x !== bestMatch)
     let current = getMatchingForm(bestMatch, tag) || getBestFormMatch(bestMatch, query)
 
@@ -115,7 +125,7 @@ export class Main extends React.Component {
   onLanguageChange = (event) => {
     let lang = event.target.value
     localStorage.setItem('lang', lang)
-    this.setState({ lang }, () => this.navigate(this.state.query))
+    this.setState({ lang }, () => this.navigate({q: this.state.query}))
   };
 
   setCurrentForm = (current) => {
@@ -171,9 +181,17 @@ export class Main extends React.Component {
           <div className={styles.content}>
             <Logo />
             <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder={t.ui['search-for-an-icelandic-word']} autoCapitalize="none" />
-            <Results {...this.state} setCurrentForm={this.setCurrentForm} />
-            <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
-            <Suggestions suggestions={suggestions} navigate={this.setSuggestion} />
+            { result && <div>
+              <span className={styles.headWord}>{result.headWord}</span>
+              <span className={styles.wordClass}>{result.wordClass}</span>
+            </div> }
+
+            { query && <div>
+              <Results {...this.state} setCurrentForm={this.setCurrentForm} />
+              <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
+              <Suggestions suggestions={suggestions} navigate={this.setSuggestion} />
+            </div> }
+
             <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
           </div>
           <Footer />
