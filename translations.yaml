@@ -4,6 +4,8 @@ en:
     search-for-an-icelandic-word: 'Search for an icelandic word'
     did-you-mean: 'Did you mean'
     see-also: 'See also'
+    no-results: 'No results'
+    no-alternate-forms: 'No alternate forms'
 
 is:
   locale: is
@@ -11,4 +13,6 @@ is:
     search-for-an-icelandic-word: 'Leita að íslensku orði'
     did-you-mean: 'Áttirðu við'
     see-also: 'Sjá einnig'
+    no-results: 'No results'
+    no-alternate-forms: 'No alternate forms'
 

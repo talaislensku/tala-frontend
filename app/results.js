@@ -3,10 +3,15 @@ import styles from './main.css'
 import classNames from 'classnames'
 import Links from './links'
 import pronounify from './pronounify'
+import { translate } from 'react-translate'
 
-const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
-  if (!(result && current && result.forms.length)) {
-    return <div />
+const Results = ({t, query, result, current, otherMatches, setCurrentForm}) => {
+  if (!result) {
+    return <div>{ t('no-results') }</div>
+  }
+
+  if (!(current && current.tags)) {
+    return <div>{ t('no-alternate-forms') }</div>
   }
 
   const tags = Object.keys(current.tags)
@@ -20,7 +25,7 @@ const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
     otherTags = otherTags.filter(x => x !== 'number')
   }
 
-  let visible = result.forms.filter(form => otherTags.every(
+  let visible = result.forms && result.forms.filter(form => otherTags.every(
       otherTag => form.tags[otherTag] === current.tags[otherTag]))
 
   let wordClasses = (word) => {
@@ -35,11 +40,6 @@ const Results = ({query, result, current, otherMatches, setCurrentForm}) => {
     <div>
       { visible &&
         <div>
-          <div>
-            <span className={styles.headWord}>{result.headWord}</span>
-            <span className={styles.wordClass}>{result.wordClass}</span>
-          </div>
-
           <div className={styles.entries}>
           { visible.map(x => (
             <div key={x.grammarTag} className={wordClasses(x)} onClick={setCurrentForm.bind(null, x)}>
@@ -63,5 +63,5 @@ Results.propTypes = {
   setCurrentForm: React.PropTypes.func.isRequired,
 }
 
-export default Results
+export default translate("ui")(Results)
 
