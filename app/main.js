@@ -96,8 +96,6 @@ export class Main extends React.Component {
       return
     }
 
-    // fetch new data only if no matches
-
     lookupWord(query, this.state.lang)
       .then(res => this.handleResponse(res, {query, id, tag}))
   };
@@ -126,7 +124,7 @@ export class Main extends React.Component {
     }
 
     if (data.length === 0) {
-      // check if query matches start of a result
+      // check if query matches start of a result to reduce flicker
 
       this.getSuggestionsDebounced(query)
       this.clearResults()
