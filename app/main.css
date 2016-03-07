@@ -5,8 +5,8 @@
 }
 
 body {
-  background-color: #fff;
-  color: $black;
+  background-color: white;
+  color: $grey;
   font-family: 'Roboto Slab', serif;
   font-weight: 300;
   line-height: 1.4;
@@ -54,8 +54,8 @@ body {
 }
 
 .link {
-  color: #1976d2;
-  border-bottom: 1px solid #1976d2;
+  color: $blue;
+  border-bottom: 2px solid $blue;
   cursor: pointer;
   display: inline-block;
 }
@@ -84,26 +84,27 @@ body {
   margin-left: -20px;
   margin-right: -20px;
   padding-right: 20px;
+  color: $grey;
 }
 
 .word:hover {
-  background-color: color($blue a(10%));
+
 }
 
 .wordMatch, .wordMatch:hover {
-  background-color: $blue;
-  color: white;
+  color: $blue;
+  font-weight: 700;
 }
 
 .case {
   flex: 0 0 50%;
-  font-weight: 700;
   padding-right: 20px;
   text-align: right;
+  color: color($grey a(50%));
 }
 
 .wordMatch .case {
-  background-color: $blue;
+  color: $blue;
 }
 
 .alternate .case {
