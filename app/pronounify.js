@@ -30,7 +30,7 @@ export default function(grammarTag) {
     }
   }
 
-  else if (grammarTag.startsWith('OP')) {
+  else if (grammarTag.startsWith('OP-MM')) {
     if (grammarTag.includes('1P-ET')) {
       return 'mér'
     }
@@ -55,6 +55,33 @@ export default function(grammarTag) {
       return 'þeim'
     }
   }
+
+  else if (grammarTag.startsWith('OP-GM')) {
+    if (grammarTag.includes('1P-ET')) {
+      return 'mig'
+    }
+
+    if (grammarTag.includes('2P-ET')) {
+      return 'þig'
+    }
+
+    if (grammarTag.includes('3P-ET')) {
+      return 'hann / hana / það'
+    }
+
+    if (grammarTag.includes('1P-FT')) {
+      return 'okkur'
+    }
+
+    if (grammarTag.includes('2P-FT')) {
+      return 'ykkur'
+    }
+
+    if (grammarTag.includes('3P-FT')) {
+      return 'þá / þær / þau'
+    }
+  }
+
 
   else {
     return null
