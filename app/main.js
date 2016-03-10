@@ -20,6 +20,7 @@ const api = window.location.hostname === 'localhost' ? 'http://localhost:8000' :
 function getBestMatch(data, query) {
   return data.filter(word => word.headWord === query)[0] ||
     data.filter(word => word.forms.some(form => form.form === query))[0] ||
+    data.filter(word => word.wordClass === 'Verb')[0] ||
     data[0]
 }
 

@@ -33,6 +33,9 @@ module.exports = {
       }, {
         test: /\.yaml$/,
         loader: 'json-loader!yaml-loader'
+      }, {
+        test: /\.svg$/,
+        loader: 'file-loader'
       }
     ],
   },
@@ -41,7 +44,8 @@ module.exports = {
     require('autoprefixer'),
     require('postcss-simple-vars')({variables: brand}),
     require('postcss-color-function'),
-    require('postcss-calc')
+    require('postcss-calc'),
+    require('postcss-assets')
   ],
 
   plugins: [

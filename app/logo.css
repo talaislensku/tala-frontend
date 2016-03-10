@@ -1,25 +1,17 @@
-.root {
-  font-size: 18px;
-  font-weight: 700;
-  text-align: left;
+.logo {
+  background: no-repeat inline('../images/logo.svg');
+  background-size: cover;
+  width: width('../images/logo.svg', 1.5);
+  height: height('../images/logo.svg', 1.5);
+  margin-top: -7px;
   margin-bottom: 20px;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-}
-
-.root a {
-  text-decoration: none;
-  color: $black;
-}
-
-.root em {
-  font-style: normal;
-  color: $blue
 }
 
 @media (min-width: 900px) {
-  .root {
-    font-size: 28px;
-    text-align: center;
+  .logo {
+    width: width('../images/logo.svg');
+    height: height('../images/logo.svg');
+    margin: 0 auto;
+    margin-bottom: 30px;
   }
 }

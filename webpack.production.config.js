@@ -42,7 +42,8 @@ module.exports = {
     require('autoprefixer'),
     require('postcss-simple-vars')({variables: brand}),
     require('postcss-color-function'),
-    require('postcss-calc')
+    require('postcss-calc'),
+    require('postcss-assets')
   ],
 
   plugins: [

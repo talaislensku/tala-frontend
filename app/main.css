@@ -26,7 +26,7 @@ body {
 
 .content {
   flex: 1;
-  margin: 20px auto;
+  margin: 30px auto;
   width: 100%;
   max-width: 700px;
   padding: 0 20px;
@@ -54,8 +54,8 @@ body {
 }
 
 .link {
-  color: #1976d2;
-  border-bottom: 1px solid #1976d2;
+  color: $blue;
+  border-bottom: 2px solid $blue;
   cursor: pointer;
   display: inline-block;
 }
@@ -128,7 +128,6 @@ body {
 
 @media (min-width: 900px) {
   .root {
-    padding: 50px 0;
     font-size: 20px;
   }
 

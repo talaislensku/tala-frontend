@@ -7,7 +7,7 @@ const SeeAlso = ({t, otherMatches, setCurrent}) => (
     <div className={styles.seeAlso}>{t('see-also')}:
     { otherMatches.map(result => {
       return <div key={result.headWord + result.wordClass}>
-        <div className={styles.link} onClick={setCurrent.bind(null, result)}>{result.headWord} {result.wordClass}</div>
+        <div className={styles.link} onClick={setCurrent.bind(null, result)}>{result.headWord} ({result.wordClass})</div>
       </div>
     }) }
     </div>
