@@ -10,7 +10,7 @@ module.exports = {
 
   entry: {
     app: [
-      'webpack-dev-server/client?http://localhost:8080',
+      'webpack-dev-server/client?http://tala.dev',
       'webpack/hot/only-dev-server',
       path.resolve(__dirname, './app/index.js')
     ]
@@ -57,4 +57,8 @@ module.exports = {
       inject: 'body'
     })
   ],
+
+  devServer: {
+    host: '0.0.0.0'
+  }
 };

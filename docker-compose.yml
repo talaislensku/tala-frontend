@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  web:
+    image: 'davidblurton/tala-new:latest'
+    expose:
+      - 8080
+
+  api:
+    image: 'davidblurton/tala-api:latest'
+    expose:
+      - 8000
+    volumes_from:
+      - data
+
+  data:
+    image: 'davidblurton/tala-data:latest'
+    volumes:
+      - /code/db

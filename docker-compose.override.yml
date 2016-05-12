@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    depends_on:
+      - proxy
+    environment:
+      - VIRTUAL_HOST=tala.dev # For nginx proxy
+    volumes:
+      - .:/code
+      - /code/node_modules
+
+  api:
+    depends_on:
+      - proxy
+    environment:
+      - VIRTUAL_HOST=api.tala.dev # For nginx proxy
+
+  proxy:
+    image: rckrdstrgrd/nginx-proxy
+    ports:
+      - '80:80'
+    restart: always
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"

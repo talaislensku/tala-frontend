@@ -1,0 +1,10 @@
+FROM node:5.11
+
+ENV HOME=/code
+
+COPY package.json npm-shrinkwrap.json $HOME/
+
+WORKDIR $HOME
+RUN npm install --quiet
+
+CMD ["npm", "run", "dev"]

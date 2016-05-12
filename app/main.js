@@ -15,7 +15,7 @@ import Footer from './footer'
 import translations from '../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
-const api = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.tala.is'
+const api = window.location.hostname === 'tala.dev' ? 'http://api.tala.dev' : 'https://api.tala.is'
 
 function getBestMatch(data, query) {
   return data.filter(word => word.headWord === query)[0] ||
