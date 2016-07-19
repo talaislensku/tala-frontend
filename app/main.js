@@ -102,11 +102,15 @@ export class Main extends React.Component {
   };
 
   getSuggestions = (query) => {
-    return axios.get(`${api}/suggestions/${query}`)
+    return axios.get(`http://corrections.tala.is/${query}`)
       .then(({data}) => {
-        this.setState({
-          suggestions: data
-        })
+        let { corrections, suggestions } = data
+
+        if (corrections.length === 1) {
+          this.setSuggestion(corrections[0])
+        } else {
+          this.setState({ suggestions: corrections.concat(suggestions).slice(0, 10) })
+        }
       })
   };
 
