@@ -1,12 +1,15 @@
 {
-  "name": "tala-new",
+  "name": "tala-frontend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Frontend for tala api",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talaislensku/tala-frontend.git"
+  },
   "main": "index.js",
   "scripts": {
     "build": "rm -rf build && webpack --config webpack.production.config --bail",
     "dev": "webpack-dev-server --colors",
-    "test": "npm run test",
     "deploy": "./deploy.sh"
   },
   "author": "David Blurton",
