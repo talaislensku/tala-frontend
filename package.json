@@ -40,8 +40,8 @@
     "classnames": "^2.2.3",
     "history": "^2.0.0-rc2",
     "lodash.debounce": "^4.0.1",
-    "react": "^0.14.6",
-    "react-dom": "^0.14.6",
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
     "react-translate": "^3.0.4"
   }
 }
