@@ -23,7 +23,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel?presets[]=react,presets[]=es2015,presets[]=stage-0',
+        loader: 'babel',
         exclude: /node_modules/
       }, {
         test: /\.css$/,
