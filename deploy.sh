@@ -1,2 +1,6 @@
+#!/bin/bash
+set -e
+
 npm run build
-docker build -t davidblurton/tala-new . && docker push davidblurton/tala-new
+docker build -t davidblurton/tala-new .
+docker push davidblurton/tala-new
