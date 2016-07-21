@@ -11,11 +11,12 @@ import LanguagePicker from './language-picker'
 import SeeAlso from './see-also'
 import Suggestions from './suggestions'
 import Logo from './logo'
+import Loader from './loader'
 import Footer from './footer'
 import translations from '../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
-const api = window.location.hostname === 'tala.dev' ? 'http://api.tala.dev' : 'https://api.tala.is'
+const api = window.location.hostname === 'tala.dev' ? 'http://api.tala.dev' : 'http://api.tala.is'
 
 function getBestMatch(data, query) {
   return data.filter(word => word.headWord === query)[0] ||
@@ -74,6 +75,7 @@ export class Main extends React.Component {
 
     this.history = useQueries(createHistory)()
     this.getSuggestionsDebounced = debounce(this.getSuggestions, 500)
+    this.loadingEndDebounced = debounce(() => this.setState({ loading: false}), 500)
   }
 
   queryChanged = (event) => {
@@ -86,7 +88,7 @@ export class Main extends React.Component {
     })
   };
 
-  navigate = ({q: query, id, tag}) => {
+  navigate = async ({q: query, id, tag}) => {
     this.setState({
       query,
     })
@@ -97,8 +99,14 @@ export class Main extends React.Component {
       return
     }
 
-    lookupWord(query, this.state.lang)
-      .then(res => this.handleResponse(res, {query, id, tag}))
+    this.setState({ loading: true })
+
+    try {
+      const res = await lookupWord(query, this.state.lang)
+      this.handleResponse(res, {query, id, tag})
+    } finally {
+      this.loadingEndDebounced()
+    }
   };
 
   getSuggestions = (query) => {
@@ -202,7 +210,7 @@ export class Main extends React.Component {
   }
 
   render() {
-    let {query, result, current, otherMatches, suggestions} = this.state
+    let {query, result, current, otherMatches, suggestions, loading} = this.state
     const t = translations[this.state.lang]
 
     return (
@@ -211,6 +219,7 @@ export class Main extends React.Component {
           <div className={styles.content}>
             <Logo />
             <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder={t.ui['search-for-an-icelandic-word']} autoCapitalize="none" />
+            <Loader loading={loading} />
             { result && <div>
               <span className={styles.headWord}>{result.headWord}</span>
               <span className={styles.wordClass}>{result.wordClass}</span>
