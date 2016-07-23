@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { createHistory, useQueries } from 'history'
 import debounce from 'lodash.debounce'
 import { TranslatorProvider } from "react-translate"
+import mostRecent from './lib/most-recent'
 
 import styles from './main.css'
 import Results from './results'
@@ -41,28 +42,8 @@ function getMatchingForm(match, tag) {
   return match && match.forms.filter(x => x.grammarTag === tag)[0]
 }
 
-const lookupWord = (function() {
-  let current;
-
-  function getWord(word, lang) {
-    current = word
-
-    let promise = new Promise((resolve, reject) => {
-      axios.get(`${api}/find/${word}?lang=${lang}`)
-        .then(result => {
-          if (promise.word === current) {
-            resolve(result)
-          }
-        })
-    })
-
-    promise.word = word
-
-    return promise
-  }
-
-  return getWord
-})()
+const getWord = (word, lang) => axios.get(`${api}/find/${word}?lang=${lang}`)
+const lookupWord = mostRecent(getWord)
 
 export class Main extends React.Component {
   constructor(props) {
