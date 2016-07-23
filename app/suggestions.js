@@ -6,9 +6,12 @@ const Suggestions = ({t, suggestions, navigate}) => (
   suggestions && suggestions.length ?
     <div className={styles.seeAlso}>{t('did-you-mean')}:
     { suggestions.map(suggestion => {
-      return <div key={suggestion}>
-        <div className={styles.link} onClick={navigate.bind(null, suggestion)}>{suggestion}</div>
-      </div>
+      const navigatetoSuggestion = () => navigate(suggestion)
+      return (
+        <div key={suggestion}>
+          <div className={styles.link} onClick={navigatetoSuggestion}>{suggestion}</div>
+        </div>
+      )
     }) }
     </div>
   : <div />
