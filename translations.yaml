@@ -1,7 +1,7 @@
 en:
   locale: en
   ui:
-    search-for-an-icelandic-word: 'Search for an icelandic word'
+    search-for-an-icelandic-word: 'Search for an Icelandic word'
     did-you-mean: 'Did you mean'
     see-also: 'See also'
     no-results: 'No results'
@@ -15,4 +15,3 @@ is:
     see-also: 'Sjá einnig'
     no-results: 'Engar niðurstöður'
     no-alternate-forms: 'Engar beygingar'
-
