@@ -21,7 +21,7 @@ const Links = ({ result, current, setCurrentForm }) => {
     const otherTags = tags.filter(t => t !== tag)
     return form.tags[tag] !== current.tags[tag] &&
       otherTags.every(otherTag => form.tags[otherTag] === current.tags[otherTag])
-  })).filter(x => x)
+  })).filter(x => x && x.length !== 0)
 
   return (
     <div>
