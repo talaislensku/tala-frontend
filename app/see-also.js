@@ -15,4 +15,4 @@ const SeeAlso = ({t, otherMatches, setCurrent}) => (
   : <div />
 )
 
-export default translate("ui")(SeeAlso)
+export default translate('ui')(SeeAlso)

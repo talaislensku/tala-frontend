@@ -6,6 +6,12 @@ en:
     see-also: 'See also'
     no-results: 'No results'
     no-alternate-forms: 'No alternate forms'
+  cases:
+    nf: nominative
+    þf: accusative
+    þgf: dative
+    ef: genitive
+    "þgf þf": dative/accusative
 
 is:
   locale: is
@@ -15,3 +21,9 @@ is:
     see-also: 'Sjá einnig'
     no-results: 'Engar niðurstöður'
     no-alternate-forms: 'Engar beygingar'
+  cases:
+    nf: einver
+    þf: einhvern
+    þgf: einhverjum
+    ef: einhvers
+    "þgf þf": einhverju einhvern
