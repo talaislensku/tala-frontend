@@ -1,9 +1,8 @@
 import React from 'react'
 import axios from 'axios'
-import classNames from 'classnames'
 import { createHistory, useQueries } from 'history'
 import debounce from 'lodash.debounce'
-import { TranslatorProvider } from "react-translate"
+import { TranslatorProvider } from 'react-translate'
 import mostRecent from './lib/most-recent'
 
 import styles from './main.css'
@@ -18,12 +17,13 @@ import translations from '../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'tala.dev' ? 'http://api.tala.dev' : 'http://api.tala.is'
+const isVerb = word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð'
 
 function getBestMatch(data, query) {
   return data.filter(word => word.forms.some(form => form.form === query && form.grammarTag === 'GM-NH'))[0] ||
     data.filter(word => word.headWord === query)[0] ||
     data.filter(word => word.forms.some(form => form.form === query))[0] ||
-    data.filter(word => word.wordClass === 'Verb')[0] ||
+    data.filter(word => isVerb(word))[0] ||
     data[0]
 }
 
@@ -52,12 +52,12 @@ export class Main extends React.Component {
 
     this.state = {
       query: '',
-      lang: localStorage.getItem('lang') || 'en'
+      lang: localStorage.getItem('lang') || 'en',
     }
 
     this.history = useQueries(createHistory)()
     this.getSuggestionsDebounced = debounce(this.getSuggestions, 500)
-    this.loadingEndDebounced = debounce(() => this.setState({ loading: false}), 500)
+    this.loadingEndDebounced = debounce(() => this.setState({ loading: false }), 500)
   }
 
   queryChanged = (event) => {
@@ -65,12 +65,12 @@ export class Main extends React.Component {
 
     this.history.replace({
       query: {
-        q: query
-      }
+        q: query,
+      },
     })
   };
 
-  navigate = async ({q: query, id, tag}) => {
+  navigate = async ({ q: query, id, tag }) => {
     this.setState({
       query,
     })
@@ -85,7 +85,7 @@ export class Main extends React.Component {
 
     try {
       const res = await lookupWord(query, this.state.lang)
-      this.handleResponse(res, {query, id, tag})
+      this.handleResponse(res, { query, id, tag })
     } finally {
       this.loadingEndDebounced()
     }
@@ -93,7 +93,7 @@ export class Main extends React.Component {
 
   getSuggestions = (query) => {
     return axios.get(`http://corrections.tala.is/${query}`)
-      .then(({data}) => {
+      .then(({ data }) => {
         let { corrections, suggestions } = data
 
         if (corrections.length === 1) {
@@ -113,7 +113,7 @@ export class Main extends React.Component {
     })
   };
 
-  handleResponse = ({data}, {query, id, tag}) => {
+  handleResponse = ({ data }, { query, id, tag }) => {
     if (!data) {
       return
     }
@@ -137,7 +137,7 @@ export class Main extends React.Component {
         current,
         otherMatches,
         data,
-        suggestions: []
+        suggestions: [],
       })
     }
   };
@@ -145,7 +145,7 @@ export class Main extends React.Component {
   onLanguageChange = (event) => {
     let lang = event.target.value
     localStorage.setItem('lang', lang)
-    this.setState({ lang }, () => this.navigate({q: this.state.query}))
+    this.setState({ lang }, () => this.navigate({ q: this.state.query }))
   };
 
   setCurrentForm = (current) => {
@@ -154,7 +154,7 @@ export class Main extends React.Component {
         q: current.form,
         id: this.state.result.binId,
         tag: current.grammarTag,
-      }
+      },
     })
 
     if (!isMobile) {
@@ -167,7 +167,7 @@ export class Main extends React.Component {
       query: {
         q: this.state.query,
         id: result.binId,
-      }
+      },
     })
   };
 
@@ -175,7 +175,7 @@ export class Main extends React.Component {
     this.history.replace({
       query: {
         q: suggestion,
-      }
+      },
     })
   };
 
@@ -192,7 +192,7 @@ export class Main extends React.Component {
   }
 
   render() {
-    let {query, result, current, otherMatches, suggestions, loading} = this.state
+    let { query, result, current, otherMatches, suggestions, loading } = this.state
     const t = translations[this.state.lang]
 
     return (
@@ -202,16 +202,16 @@ export class Main extends React.Component {
             <Logo />
             <input ref="search" type="text" className={styles.search} value={query} onChange={this.queryChanged} placeholder={t.ui['search-for-an-icelandic-word']} autoCapitalize="none" />
             <Loader loading={loading} />
-            { result && <div>
+            {result && <div>
               <span className={styles.headWord}>{result.headWord}</span>
               <span className={styles.wordClass}>{result.wordClass}</span>
-            </div> }
+            </div>}
 
-            { query && <div>
+            {query && <div>
               <Results {...this.state} setCurrentForm={this.setCurrentForm} />
               <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
               <Suggestions suggestions={suggestions} navigate={this.setSuggestion} />
-            </div> }
+            </div>}
 
             <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
           </div>
