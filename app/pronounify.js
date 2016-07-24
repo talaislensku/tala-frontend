@@ -1,4 +1,4 @@
-export default function(grammarTag) {
+export default function (grammarTag) {
   // With personal pronoun attached
   if (grammarTag.includes('FN-NF')) {
     return null
@@ -82,8 +82,5 @@ export default function(grammarTag) {
     }
   }
 
-
-  else {
-    return null
-  }
+  return null
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './main.css'
 
-const Links = ({result, current, setCurrentForm}) => {
+const Links = ({ result, current, setCurrentForm }) => {
   if (!(result && current && result.forms.length)) {
     return <div />
   }
@@ -25,22 +25,22 @@ const Links = ({result, current, setCurrentForm}) => {
 
   return (
     <div>
-      { linkGroups.map((linkGroup, index) => (
+      {linkGroups.map((linkGroup, index) => (
         <div className={styles.linkGroup} key={index}>
           <div>
             <span className={styles.linkCurrent}>{current.tags[linkTags[index]]}</span>
-            { linkGroup.length > 0 ? '→' : null }
+            {linkGroup.length > 0 ? '→' : null}
           </div>
           <div>
-            { linkGroup.map((link) => (
+            {linkGroup.map((link) => (
               <div className={styles.linkOther} key={link.grammarTag}>
                 {link.tags[linkTags[index]]}:&nbsp;
                 <span className={styles.link} onClick={setCurrentForm.bind(null, link)}>{link.form}</span>
               </div>
-              )) }
+              ))}
           </div>
         </div>
-      )) }
+      ))}
     </div>
   )
 }
