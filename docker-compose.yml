@@ -10,10 +10,3 @@ services:
     image: 'davidblurton/tala-api:latest'
     expose:
       - 8000
-    volumes_from:
-      - data
-
-  data:
-    image: 'davidblurton/tala-data:latest'
-    volumes:
-      - /code/db

@@ -14,10 +14,15 @@ services:
       - /code/node_modules
 
   api:
+    build: ../tala-api/.
+    command: npm run dev
     depends_on:
       - proxy
     environment:
       - VIRTUAL_HOST=api.tala.dev # For nginx proxy
+    volumes:
+      - ../tala-api/.:/code
+      - /code/node_modules
 
   proxy:
     image: rckrdstrgrd/nginx-proxy
