@@ -1,12 +1,16 @@
-{
-  "parser": "babel-eslint",
-  "extends": ["airbnb"],
-  "rules": {
-    "semi": [2, "never"],
-    "max-len": [0],
-    "eqeqeq": [2, "allow-null"]
-  },
-  "env": {
-    "browser": true
-  }
-}
+---
+parser: babel-eslint
+
+env:
+  es6: true
+
+plugins:
+  - babel
+  - react
+
+extends: "airbnb"
+
+rules:
+  semi:
+    - 2
+    - "never"
