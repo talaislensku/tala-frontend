@@ -20,7 +20,8 @@ const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'tala.dev' ? 'http://api.tala.dev' : 'http://api.tala.is'
 
 function getBestMatch(data, query) {
-  return data.filter(word => word.headWord === query)[0] ||
+  return data.filter(word => word.forms.some(form => form.form === query && form.grammarTag === 'GM-NH'))[0] ||
+    data.filter(word => word.headWord === query)[0] ||
     data.filter(word => word.forms.some(form => form.form === query))[0] ||
     data.filter(word => word.wordClass === 'Verb')[0] ||
     data[0]
