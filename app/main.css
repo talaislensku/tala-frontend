@@ -67,8 +67,10 @@ body {
 
 .linkCurrent {
   font-weight: 700;
-  text-align: right;
+  text-align: left;
   margin-right: 1em;
+  display: inline-block;
+  width: 150px;
 }
 
 .linkOther {
