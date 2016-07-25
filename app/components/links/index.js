@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './main.css'
+import styles from '../main/main.css'
 
 const Links = ({ result, current, setCurrentForm }) => {
   if (!(result && current && result.forms.length)) {

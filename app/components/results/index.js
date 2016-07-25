@@ -1,8 +1,8 @@
 import React from 'react'
-import styles from './main.css'
+import styles from '../main/main.css'
 import classNames from 'classnames'
-import Links from './links'
-import pronounify from './pronounify'
+import Links from '../links'
+import pronounify from '../../lib/pronounify'
 import { translate } from 'react-translate'
 
 const isVerb = word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð'

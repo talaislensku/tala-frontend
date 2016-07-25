@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Main } from './main'
+import { Main } from './components/main'
 
 const root = document.createElement('div')
 document.body.appendChild(root)

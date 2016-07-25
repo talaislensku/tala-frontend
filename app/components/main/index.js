@@ -3,18 +3,18 @@ import axios from 'axios'
 import { createHistory, useQueries } from 'history'
 import debounce from 'lodash.debounce'
 import { TranslatorProvider } from 'react-translate'
-import mostRecent from './lib/most-recent'
+import mostRecent from '../../lib/most-recent'
 
 import styles from './main.css'
-import Results from './results'
-import LanguagePicker from './language-picker'
-import SeeAlso from './see-also'
-import Suggestions from './suggestions'
-import Logo from './logo'
-import Loader from './loader'
-import Footer from './footer'
-import Cases from './cases'
-import translations from '../translations.yaml'
+import Results from '../results'
+import LanguagePicker from '../language-picker'
+import SeeAlso from '../see-also'
+import Suggestions from '../suggestions'
+import Logo from '../logo'
+import Loader from '../loader'
+import Footer from '../footer'
+import Cases from '../cases'
+import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'tala.dev' ? 'http://api.tala.dev' : 'http://api.tala.is'
@@ -161,7 +161,7 @@ export class Main extends React.Component {
     if (bestMatch) {
       if (isVerb(bestMatch)) {
         lookupCases(bestMatch.headWord)
-          .then(({ data }) => this.setState({ cases: data }))
+          .then(({ data: cases }) => this.setState({ cases }))
       } else {
         this.setState({ cases: null })
       }

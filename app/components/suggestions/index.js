@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './main.css'
+import styles from '../main/main.css'
 import { translate } from 'react-translate'
 
 const Suggestions = ({t, suggestions, navigate}) => (
