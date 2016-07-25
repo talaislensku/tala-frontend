@@ -162,6 +162,8 @@ export class Main extends React.Component {
       if (isVerb(bestMatch)) {
         lookupCases(bestMatch.headWord)
           .then(({ data }) => this.setState({ cases: data }))
+      } else {
+        this.setState({ cases: null })
       }
 
       this.getSuggestionsDebounced.cancel()

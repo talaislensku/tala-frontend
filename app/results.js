@@ -5,6 +5,8 @@ import Links from './links'
 import pronounify from './pronounify'
 import { translate } from 'react-translate'
 
+const isVerb = word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð'
+
 function getListByTag(currentTags) {
   const tags = Object.keys(currentTags)
   const listByTag = tags.includes('grammarCase') ? 'grammarCase' :
@@ -58,6 +60,11 @@ const Results = ({ t, result, current, setCurrentForm }) => {
               </div>
             ))}
           </div>
+
+          {isVerb(result) ?
+            result.forms.filter(x => x.grammarTag === 'GM-SAGNB').map(word =>
+              <div>hafa {word.form}</div>)
+          : null}
 
           <Links result={result} current={current} setCurrentForm={setCurrentForm} />
         </div>
