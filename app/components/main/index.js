@@ -69,19 +69,6 @@ export class Main extends React.Component {
     this.loadingEndDebounced = debounce(() => this.setState({ loading: false }), 500)
   }
 
-  getSuggestions = (query) => {
-    return lookupSuggestions(query)
-      .then(({ data }) => {
-        const { corrections, suggestions } = data
-
-        if (corrections.length === 1) {
-          this.setSuggestion(corrections[0])
-        } else {
-          this.setState({ suggestions: corrections.concat(suggestions).slice(0, 10) })
-        }
-      })
-  }
-
   componentDidMount() {
     this.history.listen(location => {
       this.navigate(location.query)
@@ -99,6 +86,17 @@ export class Main extends React.Component {
     localStorage.setItem('lang', lang)
     this.setState({ lang }, () => this.navigate({ q: this.state.query }))
   }
+
+  getSuggestions = (query) => lookupSuggestions(query)
+    .then(({ data }) => {
+      const { corrections, suggestions } = data
+
+      if (corrections.length === 1) {
+        this.setSuggestion(corrections[0])
+      } else {
+        this.setState({ suggestions: corrections.concat(suggestions).slice(0, 10) })
+      }
+    })
 
   setCurrentForm = (current) => {
     this.history.replace({

@@ -9,4 +9,9 @@ const Cases = ({ t, cases }) => (
   </span> : <span />
 )
 
+Cases.propTypes = {
+  cases: React.PropTypes.object,
+  t: React.PropTypes.func,
+}
+
 export default translate('cases')(Cases)
