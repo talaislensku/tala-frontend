@@ -1,18 +1,16 @@
 export default func => {
-  let current;
+  let currentPromise
 
   return (...args) => {
-    current = Date.now()
-
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve) => {
       func.apply(null, args).then(result => {
-        if (promise.current === current) {
+        if (currentPromise === promise) {
           resolve(result)
         }
       })
     })
 
-    promise.current = current
+    currentPromise = promise
 
     return promise
   }
