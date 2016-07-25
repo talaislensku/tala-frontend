@@ -1,5 +1,6 @@
 import React from 'react'
-import styles from '../main/main.css'
+import styles from './see-also.css'
+import linkStyles from '../links/links.css'
 import { translate } from 'react-translate'
 
 const SeeAlso = ({t, otherMatches, setCurrent}) => (
@@ -8,7 +9,7 @@ const SeeAlso = ({t, otherMatches, setCurrent}) => (
     { otherMatches.map(result => {
       const setCurrentResult = () => setCurrent(result)
       return <div key={result.headWord + result.wordClass}>
-        <div className={styles.link} onClick={setCurrentResult}>{result.headWord}  {result.wordClass}</div>
+        <div className={linkStyles.link} onClick={setCurrentResult}>{result.headWord}  {result.wordClass}</div>
       </div>
     }) }
     </div>

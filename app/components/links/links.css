@@ -1,0 +1,23 @@
+.link {
+  color: $blue;
+  border-bottom: 2px solid $blue;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.linkGroup {
+  margin-bottom: .5em;
+  display: flex;
+}
+
+.linkCurrent {
+  font-weight: 700;
+  text-align: left;
+  margin-right: 1em;
+  display: inline-block;
+  width: 150px;
+}
+
+.linkOther {
+  margin-left: 1em;
+}
