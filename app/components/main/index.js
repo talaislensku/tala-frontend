@@ -56,27 +56,26 @@ const getSuggestions = (query) => axios.get(`http://corrections.tala.is/${query}
 const lookupSuggestions = mostRecent(getSuggestions)
 
 export class Main extends React.Component {
+  static initialState = {
+    cases: null,
+    current: null,
+    otherMatches: null,
+    result: null,
+    suggestions: null,
+  }
+
   constructor(props) {
     super(props)
 
-    this.state = {
-      query: '',
-      lang: localStorage.getItem('lang') || 'en',
-    }
-
+    this.state = Main.initialState
     this.history = useQueries(createHistory)()
     this.getSuggestionsDebounced = debounce(this.getSuggestions, 500)
     this.loadingEndDebounced = debounce(() => this.setState({ loading: false }), 500)
   }
 
   componentDidMount() {
-    this.history.listen(location => {
-      this.navigate(location.query)
-    })
-
-    if (!window.location.search) {
-      this.history.push('/?q=hestur')
-    }
+    this.history.listen(this.navigate)
+    this.navigate()
 
     this.refs.search.focus()
   }
@@ -84,7 +83,7 @@ export class Main extends React.Component {
   onLanguageChange = (event) => {
     const lang = event.target.value
     localStorage.setItem('lang', lang)
-    this.setState({ lang }, () => this.navigate({ q: this.state.query }))
+    this.navigate()
   }
 
   getSuggestions = (query) => lookupSuggestions(query)
@@ -100,8 +99,8 @@ export class Main extends React.Component {
 
   setCurrentForm = (current) => {
     this.history.replace({
+      pathname: current.form,
       query: {
-        q: current.form,
         id: this.state.result.binId,
         tag: current.grammarTag,
       },
@@ -114,29 +113,24 @@ export class Main extends React.Component {
 
   setCurrent = (result) => {
     this.history.replace({
+      ...this.history.location,
       query: {
-        q: this.state.query,
         id: result.binId,
       },
     })
   }
 
   setSuggestion = (suggestion) => {
-    this.history.replace({
-      query: {
-        q: suggestion,
-      },
-    })
+    this.history.replace(suggestion)
   }
 
+  getQuery = () =>
+    this.history && decodeURIComponent(this.history.getCurrentLocation().pathname.replace('/', ''))
+
+  getLang = () => window.localStorage.getItem('lang') || 'en'
+
   clearResults = () => {
-    this.setState({
-      result: null,
-      current: null,
-      otherMatches: null,
-      suggestions: null,
-      cases: null,
-    })
+    this.setState(Main.initialState)
   }
 
   handleResponse = ({ data }, { query, id, tag }) => {
@@ -169,16 +163,14 @@ export class Main extends React.Component {
         result: bestMatch,
         current,
         otherMatches,
-        data,
         suggestions: [],
       })
     }
   }
 
-  navigate = async ({ q: query, id, tag }) => {
-    this.setState({
-      query,
-    })
+  navigate = async () => {
+    const query = this.getQuery()
+    const { query: { id, tag } } = this.history.getCurrentLocation()
 
     if (!query) {
       this.clearResults()
@@ -189,7 +181,7 @@ export class Main extends React.Component {
     this.setState({ loading: true })
 
     try {
-      const res = await lookupWord(query, this.state.lang)
+      const res = await lookupWord(query, this.getLang())
       this.handleResponse(res, { query, id, tag })
     } finally {
       this.loadingEndDebounced()
@@ -197,18 +189,15 @@ export class Main extends React.Component {
   }
 
   queryChanged = (event) => {
-    const query = event.target.value
-
     this.history.replace({
-      query: {
-        q: query,
-      },
+      pathname: event.target.value,
     })
   }
 
   render() {
-    let { query, result, otherMatches, suggestions, loading, cases } = this.state
-    const t = translations[this.state.lang]
+    const query = this.getQuery()
+    const { result, current, otherMatches, suggestions, loading, cases } = this.state
+    const t = translations[this.getLang()]
 
     return (
       <TranslatorProvider translations={t}>
@@ -233,12 +222,12 @@ export class Main extends React.Component {
             </div>}
 
             {query && <div>
-              <Results {...this.state} setCurrentForm={this.setCurrentForm} />
+              <Results result={result} current={current} setCurrentForm={this.setCurrentForm} />
               <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
               <Suggestions suggestions={suggestions} navigate={this.setSuggestion} />
             </div>}
 
-            <LanguagePicker lang={this.state.lang} onChange={this.onLanguageChange} />
+            <LanguagePicker lang={this.getLang()} onChange={this.onLanguageChange} />
           </div>
           <Footer />
         </div>
