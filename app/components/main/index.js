@@ -1,9 +1,8 @@
 import React from 'react'
-import axios from 'axios'
 import debounce from 'lodash.debounce'
 import { TranslatorProvider } from 'react-translate'
-import mostRecent from '../../lib/most-recent'
 
+import * as api from '../../lib/api'
 import styles from './main.css'
 import Results from '../results'
 import LanguagePicker from '../language-picker'
@@ -16,7 +15,7 @@ import Cases from '../cases'
 import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
-const api = window.location.hostname === 'tala.dev' ? 'http://api.tala.dev' : 'http://api.tala.is'
+
 const isVerb = word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð'
 
 function getMatch(data, id) {
@@ -48,15 +47,6 @@ function getMatchingForm(match, tag) {
 
   return match && match.forms.filter(x => x.grammarTag === tag)[0]
 }
-
-const getWord = (word, lang) => axios.get(`${api}/find/${word}?lang=${lang}`)
-const lookupWord = mostRecent(getWord)
-
-const getCases = (word, lang) => axios.get(`${api}/cases/${word}?lang=${lang}`)
-const lookupCases = mostRecent(getCases)
-
-const getSuggestions = (query) => axios.get(`http://corrections.tala.is/${query}`)
-const lookupSuggestions = mostRecent(getSuggestions)
 
 export default class Main extends React.Component {
   static initialState = {
@@ -100,7 +90,7 @@ export default class Main extends React.Component {
     this.navigate({ query, id, tag })
   }
 
-  getSuggestions = (query) => lookupSuggestions(query)
+  getSuggestions = (query) => api.lookupSuggestions(query)
     .then(({ data }) => {
       const { corrections, suggestions } = data
 
@@ -158,7 +148,7 @@ export default class Main extends React.Component {
 
     if (bestMatch) {
       if (isVerb(bestMatch)) {
-        lookupCases(bestMatch.headWord)
+        api.lookupCases(bestMatch.headWord)
           .then(({ data: cases }) => this.setState({ cases }))
       } else {
         this.setState({ cases: null })
@@ -184,7 +174,7 @@ export default class Main extends React.Component {
     this.setState({ loading: true })
 
     try {
-      const res = await lookupWord(query, this.getLang())
+      const res = await api.lookupWord(query, this.getLang())
       this.handleResponse(res, { query, id, tag })
     } finally {
       this.loadingEndDebounced()
