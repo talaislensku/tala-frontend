@@ -54,7 +54,7 @@ const Results = ({ t, result, current, setCurrentForm }) => {
         <div>
           <div className={styles.entries}>
             {visible.map(x => (
-              <div key={x.grammarTag} className={wordClasses(x)} onClick={setCurrentForm.bind(null, x)}>
+              <div key={x.grammarTag} className={wordClasses(x)} onClick={setCurrentForm.bind(null, x, result)}>
                 <div className={styles.case}>{pronounify(x.grammarTag) || x.tags[listByTag]}</div>
                 <div className={styles.wordForm}>{x.form}</div>
               </div>

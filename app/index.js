@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Main } from './components/main'
+import Router from './components/router'
 
 const root = document.createElement('div')
 document.body.appendChild(root)
 
-const rootInstance = ReactDOM.render(<Main />, root)
+const rootInstance = ReactDOM.render(<Router />, root)
 
 if (module.hot) {
   require('react-hot-loader/Injection').RootInstanceProvider.injectProvider({

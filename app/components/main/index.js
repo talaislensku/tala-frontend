@@ -1,6 +1,5 @@
 import React from 'react'
 import axios from 'axios'
-import { createHistory, useQueries } from 'history'
 import debounce from 'lodash.debounce'
 import { TranslatorProvider } from 'react-translate'
 import mostRecent from '../../lib/most-recent'
@@ -20,10 +19,14 @@ const isMobile = 'ontouchstart' in window
 const api = window.location.hostname === 'tala.dev' ? 'http://api.tala.dev' : 'http://api.tala.is'
 const isVerb = word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð'
 
+function getMatch(data, id) {
+  return data.filter(d => d.binId === Number(id))[0]
+}
+
 function getBestMatch(data, query) {
   return data.filter(word =>
-    word.forms && word.forms.some(form =>
-      form.form === query && form.grammarTag === 'GM-NH'))[0] ||
+          word.forms && word.forms.some(form =>
+            form.form === query && form.grammarTag === 'GM-NH'))[0] ||
     data.filter(word => word.headWord === query)[0] ||
     data.filter(word => word.forms.some(form => form.form === query))[0] ||
     data.filter(word => isVerb(word))[0] ||
@@ -55,7 +58,7 @@ const lookupCases = mostRecent(getCases)
 const getSuggestions = (query) => axios.get(`http://corrections.tala.is/${query}`)
 const lookupSuggestions = mostRecent(getSuggestions)
 
-export class Main extends React.Component {
+export default class Main extends React.Component {
   static initialState = {
     cases: null,
     current: null,
@@ -64,26 +67,37 @@ export class Main extends React.Component {
     suggestions: null,
   }
 
+  static propTypes = {
+    query: React.PropTypes.string,
+    updateRoute: React.PropTypes.func,
+    params: React.PropTypes.object,
+  }
+
   constructor(props) {
     super(props)
 
     this.state = Main.initialState
-    this.history = useQueries(createHistory)()
     this.getSuggestionsDebounced = debounce(this.getSuggestions, 500)
     this.loadingEndDebounced = debounce(() => this.setState({ loading: false }), 500)
   }
 
   componentDidMount() {
-    this.history.listen(this.navigate)
-    this.navigate()
-
+    const { query, params: { id, tag } } = this.props
+    this.navigate({ query, id, tag })
     this.refs.search.focus()
+  }
+
+  componentWillReceiveProps(props) {
+    const { query, params: { id, tag } } = props
+    this.navigate({ query, id, tag })
   }
 
   onLanguageChange = (event) => {
     const lang = event.target.value
     localStorage.setItem('lang', lang)
-    this.navigate()
+
+    const { query, params: { id, tag } } = this.props
+    this.navigate({ query, id, tag })
   }
 
   getSuggestions = (query) => lookupSuggestions(query)
@@ -98,12 +112,10 @@ export class Main extends React.Component {
     })
 
   setCurrentForm = (current) => {
-    this.history.replace({
-      pathname: current.form,
-      query: {
-        id: this.state.result.binId,
-        tag: current.grammarTag,
-      },
+    const { updateRoute } = this.props
+    updateRoute(current.form, {
+      id: this.state.result.binId,
+      tag: current.grammarTag,
     })
 
     if (!isMobile) {
@@ -112,20 +124,14 @@ export class Main extends React.Component {
   }
 
   setCurrent = (result) => {
-    this.history.replace({
-      ...this.history.location,
-      query: {
-        id: result.binId,
-      },
-    })
+    const { updateRoute, query } = this.props
+    updateRoute(query, { id: result.binId })
   }
 
   setSuggestion = (suggestion) => {
-    this.history.replace(suggestion)
+    const { updateRoute } = this.props
+    updateRoute(suggestion)
   }
-
-  getQuery = () =>
-    this.history && decodeURIComponent(this.history.getCurrentLocation().pathname.replace('/', ''))
 
   getLang = () => window.localStorage.getItem('lang') || 'en'
 
@@ -146,7 +152,7 @@ export class Main extends React.Component {
       return
     }
 
-    const bestMatch = data.filter(d => d.binId === id)[0] || getBestMatch(data, query)
+    const bestMatch = getMatch(data, id) || getBestMatch(data, query)
     const otherMatches = data.filter(x => x !== bestMatch)
     const current = getMatchingForm(bestMatch, tag) || getBestFormMatch(bestMatch, query)
 
@@ -168,10 +174,7 @@ export class Main extends React.Component {
     }
   }
 
-  navigate = async () => {
-    const query = this.getQuery()
-    const { query: { id, tag } } = this.history.getCurrentLocation()
-
+  navigate = async ({ query, id, tag }) => {
     if (!query) {
       this.clearResults()
       this.getSuggestionsDebounced.cancel()
@@ -189,13 +192,12 @@ export class Main extends React.Component {
   }
 
   queryChanged = (event) => {
-    this.history.replace({
-      pathname: event.target.value,
-    })
+    const { updateRoute } = this.props
+    updateRoute(event.target.value)
   }
 
   render() {
-    const query = this.getQuery()
+    const { query } = this.props
     const { result, current, otherMatches, suggestions, loading, cases } = this.state
     const t = translations[this.getLang()]
 
