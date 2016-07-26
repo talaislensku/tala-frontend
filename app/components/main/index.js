@@ -1,6 +1,9 @@
 import React from 'react'
 import debounce from 'lodash.debounce'
 import { TranslatorProvider } from 'react-translate'
+import {
+  isVerb, getMatch, getBestMatch, getMatchingForm, getBestFormMatch,
+} from '../../lib/matching'
 
 import * as api from '../../lib/api'
 import styles from './main.css'
@@ -15,38 +18,6 @@ import Cases from '../cases'
 import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
-
-const isVerb = word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð'
-
-function getMatch(data, id) {
-  return data.filter(d => d.binId === Number(id))[0]
-}
-
-function getBestMatch(data, query) {
-  return data.filter(word =>
-          word.forms && word.forms.some(form =>
-            form.form === query && form.grammarTag === 'GM-NH'))[0] ||
-    data.filter(word => word.headWord === query)[0] ||
-    data.filter(word => word.forms.some(form => form.form === query))[0] ||
-    data.filter(word => isVerb(word))[0] ||
-    data[0]
-}
-
-function getBestFormMatch(match, query) {
-  if (!(match && match.forms)) {
-    return {}
-  }
-
-  return match && match.forms.filter(x => x.form.toLowerCase() === query.toLowerCase())[0]
-}
-
-function getMatchingForm(match, tag) {
-  if (!(match && match.forms)) {
-    return {}
-  }
-
-  return match && match.forms.filter(x => x.grammarTag === tag)[0]
-}
 
 export default class Main extends React.Component {
   static initialState = {
