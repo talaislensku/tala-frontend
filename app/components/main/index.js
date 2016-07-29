@@ -1,9 +1,7 @@
 import React from 'react'
-import debounce from 'lodash.debounce'
 import { TranslatorProvider } from 'react-translate'
-import {
-  isVerb, getMatch, getBestMatch, getMatchingForm, getBestFormMatch,
-} from '../../lib/matching'
+import { connect } from 'react-redux'
+import { lookupWord } from '../../action-creators/word'
 
 import * as api from '../../lib/api'
 import styles from './main.css'
@@ -19,27 +17,17 @@ import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
 
-export default class Main extends React.Component {
-  static initialState = {
-    cases: null,
-    current: null,
-    otherMatches: null,
-    result: null,
-    suggestions: null,
-  }
-
+class Main extends React.Component {
   static propTypes = {
+    dispatch: React.PropTypes.func,
     query: React.PropTypes.string,
     updateRoute: React.PropTypes.func,
     params: React.PropTypes.object,
-  }
-
-  constructor(props) {
-    super(props)
-
-    this.state = Main.initialState
-    this.getSuggestionsDebounced = debounce(this.getSuggestions, 500)
-    this.loadingEndDebounced = debounce(() => this.setState({ loading: false }), 500)
+    word: React.PropTypes.shape({
+      result: React.PropTypes.object,
+      current: React.PropTypes.object,
+      otherMatches: React.PropTypes.array,
+    }),
   }
 
   componentDidMount() {
@@ -50,7 +38,13 @@ export default class Main extends React.Component {
 
   componentWillReceiveProps(props) {
     const { query, params: { id, tag } } = props
-    this.navigate({ query, id, tag })
+    if (
+      query !== this.props.query ||
+      id !== this.props.params.id ||
+      tag !== this.props.params.tag
+    ) {
+      this.navigate({ query, id, tag })
+    }
   }
 
   onLanguageChange = (event) => {
@@ -61,21 +55,21 @@ export default class Main extends React.Component {
     this.navigate({ query, id, tag })
   }
 
-  getSuggestions = (query) => api.lookupSuggestions(query)
-    .then(({ data }) => {
-      const { corrections, suggestions } = data
-
-      if (corrections.length === 1) {
-        this.setSuggestion(corrections[0])
-      } else {
-        this.setState({ suggestions: corrections.concat(suggestions).slice(0, 10) })
-      }
-    })
+  // getSuggestions = (query) => api.lookupSuggestions(query)
+  //   .then(({ data }) => {
+  //     const { corrections, suggestions } = data
+  //
+  //     if (corrections.length === 1) {
+  //       this.setSuggestion(corrections[0])
+  //     } else {
+  //       this.setState({ suggestions: corrections.concat(suggestions).slice(0, 10) })
+  //     }
+  //   })
 
   setCurrentForm = (current) => {
     const { updateRoute } = this.props
     updateRoute(current.form, {
-      id: this.state.result.binId,
+      id: this.props.word.result.binId,
       tag: current.grammarTag,
     })
 
@@ -96,70 +90,28 @@ export default class Main extends React.Component {
 
   getLang = () => window.localStorage.getItem('lang') || 'en'
 
-  clearResults = () => {
-    this.setState(Main.initialState)
-  }
-
-  handleResponse = ({ data }, { query, id, tag }) => {
-    if (!data) {
-      return
-    }
-
-    if (data.length === 0) {
-      // check if query matches start of a result to reduce flicker
-
-      this.getSuggestionsDebounced(query)
-      this.clearResults()
-      return
-    }
-
-    const bestMatch = getMatch(data, id) || getBestMatch(data, query)
-    const otherMatches = data.filter(x => x !== bestMatch)
-    const current = getMatchingForm(bestMatch, tag) || getBestFormMatch(bestMatch, query)
-
-    if (bestMatch) {
-      if (isVerb(bestMatch)) {
-        api.lookupCases(bestMatch.headWord)
-          .then(({ data: cases }) => this.setState({ cases }))
-      } else {
-        this.setState({ cases: null })
-      }
-
-      this.getSuggestionsDebounced.cancel()
-      this.setState({
-        result: bestMatch,
-        current,
-        otherMatches,
-        suggestions: [],
-      })
-    }
-  }
-
-  navigate = async ({ query, id, tag }) => {
-    if (!query) {
-      this.clearResults()
-      this.getSuggestionsDebounced.cancel()
-      return
-    }
-
-    this.setState({ loading: true })
-
-    try {
-      const res = await api.lookupWord(query, this.getLang())
-      this.handleResponse(res, { query, id, tag })
-    } finally {
-      this.loadingEndDebounced()
-    }
-  }
+  // getCases() {
+  //   if (isVerb(bestMatch)) {
+  //     api.lookupCases(bestMatch.headWord)
+  //       .then(({ data: cases }) => this.setState({ cases }))
+  //   } else {
+  //     this.setState({ cases: null })
+  //   }
+  // }
 
   queryChanged = (event) => {
     const { updateRoute } = this.props
     updateRoute(event.target.value)
   }
 
+  navigate = ({ query, id, tag }) => {
+    this.props.dispatch(lookupWord({ query, id, tag }, this.getLang()))
+  }
+
   render() {
     const { query } = this.props
-    const { result, current, otherMatches, suggestions, loading, cases } = this.state
+    const { result, current, otherMatches } = this.props.word
+    const { loading, suggestions, cases } = {}
     const t = translations[this.getLang()]
 
     return (
@@ -198,3 +150,5 @@ export default class Main extends React.Component {
     )
   }
 }
+
+export default connect(({ word }) => ({ word }))(Main)
