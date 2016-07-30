@@ -6,6 +6,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
 import * as reducers from './reducers'
+import storage from './lib/sync-storage'
 
 const logger = createLogger({
   collapsed: true,
@@ -16,7 +17,7 @@ const root = document.createElement('div')
 document.body.appendChild(root)
 
 const initialState = {
-  lang: window.localStorage.getItem('lang') || 'en',
+  lang: storage.getItem('lang') || 'en',
 }
 
 const store = createStore(

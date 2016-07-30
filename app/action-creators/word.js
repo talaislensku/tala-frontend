@@ -12,11 +12,14 @@ export function lookupWord({ query, tag, id }) {
     }
 
     const { lang } = getState()
-    // If id and id === getState().word.id
+
+    // If id === previous id, eagerly return data
+
     let { data } = await api.lookupWord(query, lang)
 
     if (data && data.length === 0 && query.length > 1) {
       const { data: { corrections, suggestions } } = await api.lookupSuggestions(query)
+      // Race condition here between lookupWord and lookupSuggestions
 
       if (corrections.length === 1) {
         query = corrections[0]

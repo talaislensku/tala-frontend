@@ -1,9 +1,10 @@
 import { CHANGE_LANGUAGE } from '../action-types'
 import { lookupWord } from './word'
+import storage from '../lib/sync-storage'
 
 export function changeLanguage(lang) {
   return (dispatch, getState) => {
-    window.localStorage.setItem('lang', lang)
+    storage.setItem('lang', lang)
 
     dispatch({
       type: CHANGE_LANGUAGE,
