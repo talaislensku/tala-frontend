@@ -1,15 +1,12 @@
 import React from 'react'
 import styles from './links.css'
 
-const Links = ({ result, current, setCurrentForm }) => {
+const Links = ({ result, current, setCurrentForm, listByTag }) => {
   if (!(result && current && result.forms.length)) {
     return <div />
   }
 
   const tags = Object.keys(current.tags)
-  const listByTag = tags.includes('grammarCase') ? 'grammarCase' :
-                    tags.includes('person') ? 'person' :
-                    tags.includes('degree') ? 'degree' : null
 
   let linkTags = tags.filter(x => x !== listByTag)
 

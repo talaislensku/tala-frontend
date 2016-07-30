@@ -1,0 +1,18 @@
+.root {
+
+}
+
+.link:not(.currentLink) {
+  color: $blue;
+  border-bottom: 2px solid $blue;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.currentLink {
+  font-weight: 700;
+}
+
+.link + .link {
+  margin-left: 10px;
+}

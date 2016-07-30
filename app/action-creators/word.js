@@ -15,7 +15,7 @@ const getResultsOrSuggestions = mostRecent(async (query, lang) => {
   let suggestions
   let correctedQuery
 
-  if (words && words.length === 0 && query.length > 1) {
+  if (words && words.length === 0) {
     const { data } = await api.lookupSuggestions(query)
     suggestions = data.suggestions
     corrections = data.corrections
@@ -23,6 +23,8 @@ const getResultsOrSuggestions = mostRecent(async (query, lang) => {
     if (corrections.length === 1) {
       correctedQuery = corrections[0]
       words = (await api.lookupWord(correctedQuery, lang)).data
+      suggestions = null
+      corrections = null
     }
   }
 

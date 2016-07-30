@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { changeLanguage } from '../../action-creators/lang'
 import { changeRoute } from '../../action-creators/location'
 import { lookupWord, selectWord } from '../../action-creators/word'
+import { setFilter } from '../../action-creators/filter'
 
 import styles from './main.css'
 import Results from '../results'
@@ -14,9 +15,24 @@ import Logo from '../logo'
 import Loader from '../loader'
 import Footer from '../footer'
 import Cases from '../cases'
+import Filter from '../filter'
 import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
+
+function getListByTag(filter, currentTags) {
+  const tags = Object.keys(currentTags)
+
+  if (tags.includes(filter)) {
+    return filter
+  }
+
+  const listByTag = tags.includes('grammarCase') ? 'grammarCase' :
+                    tags.includes('person') ? 'person' :
+                    tags.includes('degree') ? 'degree' : null
+
+  return listByTag
+}
 
 class Main extends React.Component {
   static propTypes = {
@@ -34,6 +50,7 @@ class Main extends React.Component {
     lang: React.PropTypes.string,
     suggestions: React.PropTypes.array,
     loading: React.PropTypes.bool,
+    filter: React.PropTypes.string,
   }
 
   componentDidMount() {
@@ -72,6 +89,10 @@ class Main extends React.Component {
     this.props.dispatch(lookupWord())
   }
 
+  setFilter = (tag) => {
+    this.props.dispatch(setFilter(tag))
+  }
+
   // getCases() {
   //   if (isVerb(bestMatch)) {
   //     api.lookupCases(bestMatch.headWord)
@@ -87,11 +108,13 @@ class Main extends React.Component {
   }
 
   render() {
-    const { location, lang, suggestions, loading } = this.props
+    const { location, lang, suggestions, loading, filter } = this.props
     const { query } = location
     const { result, current, otherMatches } = this.props.word
     const { cases } = {}
     const t = translations[lang]
+
+    const listByTag = current && current.tags && getListByTag(filter, current.tags)
 
     return (
       <TranslatorProvider translations={t}>
@@ -116,7 +139,8 @@ class Main extends React.Component {
             </div>}
 
             {query && <div>
-              <Results result={result} current={current} setCurrentForm={this.setCurrentForm} />
+              {current && current.tags && <Filter listByTag={listByTag} tags={current.tags} setFilter={this.setFilter} />}
+              <Results listByTag={listByTag} result={result} current={current} setCurrentForm={this.setCurrentForm} />
               <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
               <Suggestions suggestions={suggestions} navigate={this.setSuggestion} />
             </div>}
@@ -130,5 +154,5 @@ class Main extends React.Component {
   }
 }
 
-export default connect(({ word, suggestions, lang, location, loading }) =>
-  ({ word, suggestions, lang, location, loading }))(Main)
+export default connect(({ word, suggestions, lang, location, loading, filter }) =>
+  ({ word, suggestions, lang, location, loading, filter }))(Main)

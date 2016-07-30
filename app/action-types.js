@@ -11,3 +11,5 @@ export const CHANGE_ROUTE = 'CHANGE_ROUTE'
 
 export const START_LOADING = 'START_LOADING'
 export const STOP_LOADING = 'STOP_LOADING'
+
+export const SET_FILTER = 'SET_FILTER'
