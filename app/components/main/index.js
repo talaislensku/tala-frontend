@@ -5,6 +5,7 @@ import { changeLanguage } from '../../action-creators/lang'
 import { changeRoute } from '../../action-creators/location'
 import { lookupWord, selectWord } from '../../action-creators/word'
 import { setFilter } from '../../action-creators/filter'
+import { lookupCases } from '../../action-creators/cases'
 
 import styles from './main.css'
 import Results from '../results'
@@ -19,6 +20,9 @@ import Filter from '../filter'
 import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
+
+const isVerb = (word) => word &&
+  word.wordClass === 'Verb' || word.wordClass === 'sagnorð'
 
 function getListByTag(filter, currentTags) {
   const tags = Object.keys(currentTags)
@@ -51,11 +55,18 @@ class Main extends React.Component {
     suggestions: React.PropTypes.array,
     loading: React.PropTypes.bool,
     filter: React.PropTypes.string,
+    cases: React.PropTypes.object,
   }
 
   componentDidMount() {
     this.props.dispatch(lookupWord())
     this.refs.search.focus()
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.word.result !== this.props.word.result && isVerb(props.word.result)) {
+      this.props.dispatch(lookupCases(props.word.result.headWord))
+    }
   }
 
   onLanguageChange = (event) => {
@@ -93,25 +104,16 @@ class Main extends React.Component {
     this.props.dispatch(setFilter(tag))
   }
 
-  // getCases() {
-  //   if (isVerb(bestMatch)) {
-  //     api.lookupCases(bestMatch.headWord)
-  //       .then(({ data: cases }) => this.setState({ cases }))
-  //   } else {
-  //     this.setState({ cases: null })
-  //   }
-  // }
-
   queryChanged = (event) => {
     this.props.dispatch(changeRoute(event.target.value))
     this.props.dispatch(lookupWord())
   }
 
   render() {
-    const { location, lang, suggestions, loading, filter } = this.props
+    const { location, lang, suggestions, loading, filter, cases } = this.props
     const { query } = location
     const { result, current, otherMatches } = this.props.word
-    const { cases } = {}
+
     const t = translations[lang]
 
     const listByTag = current && current.tags && getListByTag(filter, current.tags)
@@ -154,5 +156,5 @@ class Main extends React.Component {
   }
 }
 
-export default connect(({ word, suggestions, lang, location, loading, filter }) =>
-  ({ word, suggestions, lang, location, loading, filter }))(Main)
+export default connect(({ word, suggestions, lang, location, loading, filter, cases }) =>
+  ({ word, suggestions, lang, location, loading, filter, cases }))(Main)
