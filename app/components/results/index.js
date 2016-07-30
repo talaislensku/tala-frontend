@@ -63,7 +63,7 @@ const Results = ({ t, result, current, setCurrentForm }) => {
 
           {isVerb(result) ?
             result.forms.filter(x => x.grammarTag === 'GM-SAGNB').map(word =>
-              <div>hafa {word.form}</div>)
+              <div key="GM-SAGNB">hafa {word.form}</div>)
           : null}
 
           <Links result={result} current={current} setCurrentForm={setCurrentForm} />

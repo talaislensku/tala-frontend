@@ -1,14 +1,16 @@
 import axios from 'axios'
-import mostRecent from './most-recent'
 
 const api = window.location.hostname === 'tala.dev' ?
   'http://api.tala.dev' : 'http://api.tala.is'
 
-const getWord = (word, lang) => axios.get(`${api}/find/${word}?lang=${lang}`)
-export const lookupWord = mostRecent(getWord)
+export function lookupWord(word, lang) {
+  return axios.get(`${api}/find/${word}?lang=${lang}`)
+}
 
-const getCases = (word, lang) => axios.get(`${api}/cases/${word}?lang=${lang}`)
-export const lookupCases = mostRecent(getCases)
+export function lookupCases(word, lang) {
+  return axios.get(`${api}/cases/${word}?lang=${lang}`)
+}
 
-const getSuggestions = (query) => axios.get(`http://corrections.tala.is/${query}`)
-export const lookupSuggestions = mostRecent(getSuggestions)
+export function lookupSuggestions(query) {
+  return axios.get(`http://corrections.tala.is/${query}`)
+}

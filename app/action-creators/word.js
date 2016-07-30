@@ -5,10 +5,38 @@ import {
   START_LOADING,
   STOP_LOADING,
 } from '../action-types'
+
 import * as api from '../lib/api'
+import mostRecent from '../lib/most-recent'
+
+const getResultsOrSuggestions = mostRecent(async (query, lang) => {
+  let { data: words } = await api.lookupWord(query, lang)
+  let corrections
+  let suggestions
+  let correctedQuery
+
+  if (words && words.length === 0 && query.length > 1) {
+    const { data } = await api.lookupSuggestions(query)
+    suggestions = data.suggestions
+    corrections = data.corrections
+
+    if (corrections.length === 1) {
+      correctedQuery = corrections[0]
+      words = (await api.lookupWord(correctedQuery, lang)).data
+    }
+  }
+
+  return {
+    correctedQuery,
+    words,
+    corrections,
+    suggestions,
+  }
+})
 
 export function lookupWord() {
   return async (dispatch, getState) => {
+    const { lang } = getState()
     let { query, tag, id } = getState().location
 
     if (!query) {
@@ -19,47 +47,30 @@ export function lookupWord() {
       return
     }
 
-    const { lang } = getState()
+    dispatch({ type: START_LOADING })
 
-    // If id === previous id, eagerly return data
+    const {
+      correctedQuery,
+      words,
+      corrections,
+      suggestions,
+    } = await getResultsOrSuggestions(query, lang)
 
     dispatch({
-      type: START_LOADING,
+      type: LOOKUP_SUGGESTIONS,
+      corrections,
+      suggestions,
     })
-
-    let { data } = await api.lookupWord(query, lang)
-
-    if (data && data.length === 0 && query.length > 1) {
-      const { data: { corrections, suggestions } } = await api.lookupSuggestions(query)
-      // Race condition here between lookupWord and lookupSuggestions
-
-      if (corrections.length === 1) {
-        query = corrections[0]
-        data = (await api.lookupWord(query, lang)).data
-      } else {
-        dispatch({
-          type: LOOKUP_SUGGESTIONS,
-          corrections,
-          suggestions,
-        })
-      }
-    } else {
-      dispatch({
-        type: LOOKUP_SUGGESTIONS,
-      })
-    }
 
     dispatch({
       type: LOOKUP_WORD,
-      data,
-      query,
+      data: words,
+      query: correctedQuery || query,
       id,
       tag,
     })
 
-    dispatch({
-      type: STOP_LOADING,
-    })
+    dispatch({ type: STOP_LOADING })
   }
 }
 
