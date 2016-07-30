@@ -1,9 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { createHistory, useQueries } from 'history'
+import { lookupWord } from '../../action-creators/word'
 
 import Main from '../main'
 
 class Router extends React.Component {
+  static propTypes = {
+    dispatch: React.PropTypes.func,
+  }
+
   constructor(props) {
     super(props)
 
@@ -15,9 +21,17 @@ class Router extends React.Component {
   }
 
   componentDidMount() {
-    this.history.listen(location => {
-      this.setState({ location })
-    })
+    this.history.listen(this.onHistoryChange)
+    this.onHistoryChange(this.history.getCurrentLocation())
+  }
+
+  onHistoryChange = (location) => {
+    this.setState({ location })
+
+    const query = this.getQuery()
+    const { id, tag } = location.query
+
+    this.props.dispatch(lookupWord({ query, id, tag }))
   }
 
   getQuery = () =>
@@ -36,11 +50,12 @@ class Router extends React.Component {
     return (
       <Main
         query={this.getQuery()}
-        params={location.query}
+        id={location.query.id}
+        tag={location.query.tag}
         updateRoute={this.updateRoute}
       />
     )
   }
 }
 
-export default Router
+export default connect()(Router)

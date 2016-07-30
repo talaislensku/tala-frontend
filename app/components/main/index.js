@@ -1,9 +1,8 @@
 import React from 'react'
 import { TranslatorProvider } from 'react-translate'
 import { connect } from 'react-redux'
-import { lookupWord } from '../../action-creators/word'
+import { changeLanguage } from '../../action-creators/lang'
 
-import * as api from '../../lib/api'
 import styles from './main.css'
 import Results from '../results'
 import LanguagePicker from '../language-picker'
@@ -22,37 +21,24 @@ class Main extends React.Component {
     dispatch: React.PropTypes.func,
     query: React.PropTypes.string,
     updateRoute: React.PropTypes.func,
-    params: React.PropTypes.object,
+    id: React.PropTypes.string,
+    tag: React.PropTypes.string,
     word: React.PropTypes.shape({
       result: React.PropTypes.object,
       current: React.PropTypes.object,
       otherMatches: React.PropTypes.array,
     }),
+    lang: React.PropTypes.string,
+    suggestions: React.PropTypes.array,
   }
 
   componentDidMount() {
-    const { query, params: { id, tag } } = this.props
-    this.navigate({ query, id, tag })
     this.refs.search.focus()
-  }
-
-  componentWillReceiveProps(props) {
-    const { query, params: { id, tag } } = props
-    if (
-      query !== this.props.query ||
-      id !== this.props.params.id ||
-      tag !== this.props.params.tag
-    ) {
-      this.navigate({ query, id, tag })
-    }
   }
 
   onLanguageChange = (event) => {
     const lang = event.target.value
-    localStorage.setItem('lang', lang)
-
-    const { query, params: { id, tag } } = this.props
-    this.navigate({ query, id, tag })
+    this.props.dispatch(changeLanguage(lang))
   }
 
   // getSuggestions = (query) => api.lookupSuggestions(query)
@@ -88,8 +74,6 @@ class Main extends React.Component {
     updateRoute(suggestion)
   }
 
-  getLang = () => window.localStorage.getItem('lang') || 'en'
-
   // getCases() {
   //   if (isVerb(bestMatch)) {
   //     api.lookupCases(bestMatch.headWord)
@@ -104,15 +88,11 @@ class Main extends React.Component {
     updateRoute(event.target.value)
   }
 
-  navigate = ({ query, id, tag }) => {
-    this.props.dispatch(lookupWord({ query, id, tag }, this.getLang()))
-  }
-
   render() {
-    const { query } = this.props
+    const { query, lang, suggestions } = this.props
     const { result, current, otherMatches } = this.props.word
-    const { loading, suggestions, cases } = {}
-    const t = translations[this.getLang()]
+    const { loading, cases } = {}
+    const t = translations[lang]
 
     return (
       <TranslatorProvider translations={t}>
@@ -142,7 +122,7 @@ class Main extends React.Component {
               <Suggestions suggestions={suggestions} navigate={this.setSuggestion} />
             </div>}
 
-            <LanguagePicker lang={this.getLang()} onChange={this.onLanguageChange} />
+            <LanguagePicker lang={lang} onChange={this.onLanguageChange} />
           </div>
           <Footer />
         </div>
@@ -151,4 +131,4 @@ class Main extends React.Component {
   }
 }
 
-export default connect(({ word }) => ({ word }))(Main)
+export default connect(({ word, suggestions, lang }) => ({ word, suggestions, lang }))(Main)

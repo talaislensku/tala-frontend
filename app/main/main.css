@@ -1,0 +1,155 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #fff;
+  color: $black;
+  font-family: 'Roboto Slab', serif;
+  font-weight: 300;
+  line-height: 1.4;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: none;
+}
+
+.root {
+  font-size: 16px;
+
+  /* sticky footer */
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  flex: 1;
+  margin: 30px auto;
+  width: 100%;
+  max-width: 700px;
+  padding: 0 20px;
+}
+
+.search {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid $border;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 1.5rem;
+  outline: 0;
+  padding-bottom: 5px;
+  transition: color .2s, border-color .2s;
+  width: 100%;
+  max-width: 600px;
+  color: #555;
+  margin-bottom: .5em;
+}
+
+.currentTags {
+  color: #8B999F;
+  margin-bottom: .5em;
+}
+
+.link {
+  color: $blue;
+  border-bottom: 2px solid $blue;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.linkGroup {
+  margin-bottom: .5em;
+  display: flex;
+}
+
+.linkCurrent {
+  font-weight: 700;
+  text-align: left;
+  margin-right: 1em;
+  display: inline-block;
+  width: 150px;
+}
+
+.linkOther {
+  margin-left: 1em;
+}
+
+.word {
+  padding: 5px 0;
+  display: flex;
+  flex-flow: row nowrap;
+  cursor: pointer;
+  padding-left: 20px;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-right: 20px;
+}
+
+.word:hover {
+  background-color: color($blue a(10%));
+}
+
+.wordMatch, .wordMatch:hover {
+  background-color: $blue;
+  color: white;
+}
+
+.case {
+  flex: 0 0 50%;
+  font-weight: 700;
+  padding-right: 20px;
+  text-align: right;
+}
+
+.wordMatch .case {
+  background-color: $blue;
+}
+
+.alternate .case {
+  color: transparent;
+}
+
+.entries {
+  margin: 1em 0;
+}
+
+.headWord {
+  font-size: 2rem;
+}
+
+.wordClass {
+  margin-left: 1em;
+}
+
+.seeAlso {
+  margin-top: 1em;
+}
+
+@media (min-width: 900px) {
+  .root {
+    font-size: 20px;
+  }
+
+  .headWord {
+    font-size: 2.5rem;
+  }
+
+  .word {
+    margin-left: -210px;
+  }
+
+  .case {
+    flex: 0 0 210px;
+  }
+
+  .links {
+    text-align: right;
+  }
+
+  .entries {
+    margin-left: -20px;
+  }
+}

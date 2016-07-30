@@ -15,8 +15,13 @@ const logger = createLogger({
 const root = document.createElement('div')
 document.body.appendChild(root)
 
+const initialState = {
+  lang: window.localStorage.getItem('lang') || 'en',
+}
+
 const store = createStore(
   combineReducers(reducers),
+  initialState,
   applyMiddleware(thunk, logger)
 )
 

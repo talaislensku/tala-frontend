@@ -3,7 +3,9 @@ import * as api from '../lib/api'
 
 export function lookupWord({ query, tag, id }) {
   return async (dispatch, getState) => {
-    const lang = window.localStorage.getItem('lang') || 'en'
+    const { lang } = getState()
+
+    // If id and id === getState().word.id
     const { data } = await api.lookupWord(query, lang)
 
     if (data && data.length === 0) {
