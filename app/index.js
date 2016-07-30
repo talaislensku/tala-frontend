@@ -1,12 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Router from './components/router'
+import Main from './components/main'
 import { Provider } from 'react-redux'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
 import * as reducers from './reducers'
 import storage from './lib/sync-storage'
+import { createHistory, useQueries } from 'history'
+const history = useQueries(createHistory)()
 
 const logger = createLogger({
   collapsed: true,
@@ -16,8 +18,15 @@ const logger = createLogger({
 const root = document.createElement('div')
 document.body.appendChild(root)
 
+const currentLocation = history.getCurrentLocation()
+
 const initialState = {
   lang: storage.getItem('lang') || 'en',
+  location: {
+    query: decodeURIComponent(currentLocation.pathname.replace('/', '')),
+    id: currentLocation.query.id,
+    tag: currentLocation.query.tag,
+  },
 }
 
 const store = createStore(
@@ -28,7 +37,7 @@ const store = createStore(
 
 const rootInstance = ReactDOM.render(
   <Provider store={store}>
-    <Router />
+    <Main />
   </Provider>,
   root
 )

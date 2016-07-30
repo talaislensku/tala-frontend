@@ -2,6 +2,8 @@ import React from 'react'
 import { TranslatorProvider } from 'react-translate'
 import { connect } from 'react-redux'
 import { changeLanguage } from '../../action-creators/lang'
+import { changeRoute } from '../../action-creators/location'
+import { lookupWord, selectWord } from '../../action-creators/word'
 
 import styles from './main.css'
 import Results from '../results'
@@ -19,10 +21,11 @@ const isMobile = 'ontouchstart' in window
 class Main extends React.Component {
   static propTypes = {
     dispatch: React.PropTypes.func,
-    query: React.PropTypes.string,
-    updateRoute: React.PropTypes.func,
-    id: React.PropTypes.string,
-    tag: React.PropTypes.string,
+    location: React.PropTypes.shape({
+      query: React.PropTypes.string,
+      id: React.PropTypes.string,
+      tag: React.PropTypes.string,
+    }),
     word: React.PropTypes.shape({
       result: React.PropTypes.object,
       current: React.PropTypes.object,
@@ -30,34 +33,28 @@ class Main extends React.Component {
     }),
     lang: React.PropTypes.string,
     suggestions: React.PropTypes.array,
+    loading: React.PropTypes.bool,
   }
 
   componentDidMount() {
+    this.props.dispatch(lookupWord())
     this.refs.search.focus()
   }
 
   onLanguageChange = (event) => {
     const lang = event.target.value
     this.props.dispatch(changeLanguage(lang))
+    this.props.dispatch(lookupWord())
   }
 
-  // getSuggestions = (query) => api.lookupSuggestions(query)
-  //   .then(({ data }) => {
-  //     const { corrections, suggestions } = data
-  //
-  //     if (corrections.length === 1) {
-  //       this.setSuggestion(corrections[0])
-  //     } else {
-  //       this.setState({ suggestions: corrections.concat(suggestions).slice(0, 10) })
-  //     }
-  //   })
-
   setCurrentForm = (current) => {
-    const { updateRoute } = this.props
-    updateRoute(current.form, {
-      id: this.props.word.result.binId,
+    const { dispatch, word } = this.props
+
+    dispatch(changeRoute(current.form, {
+      id: word.result.binId,
       tag: current.grammarTag,
-    })
+    }))
+    dispatch(selectWord())
 
     if (!isMobile) {
       this.refs.search.focus()
@@ -65,13 +62,14 @@ class Main extends React.Component {
   }
 
   setCurrent = (result) => {
-    const { updateRoute, query } = this.props
-    updateRoute(query, { id: result.binId })
+    const { dispatch, location } = this.props
+    dispatch(changeRoute(location.query, { id: result.binId }))
+    dispatch(lookupWord())
   }
 
   setSuggestion = (suggestion) => {
-    const { updateRoute } = this.props
-    updateRoute(suggestion)
+    this.props.dispatch(changeRoute(suggestion))
+    this.props.dispatch(lookupWord())
   }
 
   // getCases() {
@@ -84,14 +82,15 @@ class Main extends React.Component {
   // }
 
   queryChanged = (event) => {
-    const { updateRoute } = this.props
-    updateRoute(event.target.value)
+    this.props.dispatch(changeRoute(event.target.value))
+    this.props.dispatch(lookupWord())
   }
 
   render() {
-    const { query, lang, suggestions } = this.props
+    const { location, lang, suggestions, loading } = this.props
+    const { query } = location
     const { result, current, otherMatches } = this.props.word
-    const { loading, cases } = {}
+    const { cases } = {}
     const t = translations[lang]
 
     return (
@@ -131,4 +130,5 @@ class Main extends React.Component {
   }
 }
 
-export default connect(({ word, suggestions, lang }) => ({ word, suggestions, lang }))(Main)
+export default connect(({ word, suggestions, lang, location, loading }) =>
+  ({ word, suggestions, lang, location, loading }))(Main)
