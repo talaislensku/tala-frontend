@@ -21,9 +21,6 @@ import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
 
-const isVerb = (word) => word &&
-  word.wordClass === 'Verb' || word.wordClass === 'sagnorð'
-
 function getListByTag(filter, currentTags) {
   const tags = Object.keys(currentTags)
 
@@ -64,8 +61,8 @@ class Main extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.word.result !== this.props.word.result && isVerb(props.word.result)) {
-      this.props.dispatch(lookupCases(props.word.result.headWord))
+    if (props.word.result !== this.props.word.result) {
+      this.props.dispatch(lookupCases(props.word.result))
     }
   }
 
