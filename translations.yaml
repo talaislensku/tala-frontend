@@ -37,3 +37,13 @@ is:
     þgf: einhverjum
     ef: einhvers
     "þgf þf": einhverju einhvern
+  filters:
+    article: greinir
+    degree: stig
+    gender: kyn
+    grammarCase: fall
+    mood: háttur
+    number: tala
+    person: persóna
+    tense: tíð
+    voice: mynd

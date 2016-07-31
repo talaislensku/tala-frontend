@@ -1,5 +1,5 @@
 .root {
-
+  margin-top: 5px;
 }
 
 .filter {
@@ -22,6 +22,7 @@
 .currentLink {
   border-color: $blue;
   color: $blue;
+  cursor: default;
 }
 
 .link + .link {
