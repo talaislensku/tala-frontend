@@ -2,17 +2,28 @@
 
 }
 
-.link:not(.currentLink) {
-  color: $blue;
-  border-bottom: 2px solid $blue;
+.filter {
+  margin-right: 20px;
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 1px;
+}
+
+.link {
+  border: 1px solid $border;
+  color: #999;
+  font-size: 14px;
   cursor: pointer;
   display: inline-block;
+  border-radius: 5px;
+  padding: 5px 10px;
 }
 
 .currentLink {
-  font-weight: 700;
+  border-color: $blue;
+  color: $blue;
 }
 
 .link + .link {
-  margin-left: 10px;
+  margin-left: 6px;
 }

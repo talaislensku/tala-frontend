@@ -12,6 +12,16 @@ en:
     þgf: dative
     ef: genitive
     "þgf þf": dative/accusative
+  filters:
+    article: article
+    degree: degree
+    gender: gender
+    grammarCase: case
+    mood: mood
+    number: number
+    person: person
+    tense: tense
+    voice: voice
 
 is:
   locale: is

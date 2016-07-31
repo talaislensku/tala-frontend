@@ -1,9 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
 import styles from './filter.css'
+import { translate } from 'react-translate'
 
-const Filter = ({ listByTag, tags, setFilter }) => (
+const Filter = ({ t, listByTag, tags, setFilter }) => (
   <div className={styles.root}>
+      <span className={styles.filter}>Filter by:</span>
    {Object.keys(tags).map(tag => {
      const onClick = () => setFilter(tag)
      const linkStyles = classNames({
@@ -12,11 +14,11 @@ const Filter = ({ listByTag, tags, setFilter }) => (
      })
      return (
        <span key={tag} onClick={onClick} className={linkStyles}>
-        {tag}
+        {t(tag)}
        </span>
      )
    })}
   </div>
 )
 
-export default Filter
+export default translate('filters')(Filter)
