@@ -1,3 +1,8 @@
 .cases {
   font-style: italic;
+  font-size: 14px;
+}
+
+.case {
+  margin-left: 10px;
 }

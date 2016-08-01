@@ -56,7 +56,7 @@ const Results = ({ t, result, current, setCurrentForm, listByTag }) => {
             ))}
           </div>
 
-          {isVerb(result) ?
+          {false && isVerb(result) ?
             result.forms.filter(x => x.grammarTag === 'GM-SAGNB').map(word =>
               <div key="GM-SAGNB">hafa {word.form}</div>)
           : null}
