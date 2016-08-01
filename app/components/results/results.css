@@ -1,12 +1,8 @@
 .word {
-  padding: 5px 0;
-  display: flex;
-  flex-flow: row nowrap;
   cursor: pointer;
-  padding-left: 20px;
-  margin-left: -20px;
-  margin-right: -20px;
-  padding-right: 20px;
+  flex: 1;
+  padding: 5px 10px;
+  margin: -10px 10px 10px -10px;
 }
 
 .word:hover {
@@ -14,19 +10,20 @@
 }
 
 .wordMatch, .wordMatch:hover {
-  background-color: $blue;
-  color: white;
+
 }
 
 .case {
-  flex: 0 0 50%;
   font-weight: 700;
-  padding-right: 20px;
-  text-align: right;
+  margin-bottom: -5px;
 }
 
-.wordMatch .case {
-  background-color: $blue;
+.wordForm {
+  font-size: 2.5rem;
+}
+
+.wordMatch {
+  color: $blue;
 }
 
 .alternate .case {
@@ -34,7 +31,9 @@
 }
 
 .entries {
+  display: flex;
   margin: 1em 0;
+  flex-direction: column;
 }
 
 @media (min-width: 900px) {
@@ -47,14 +46,18 @@
   }
 
   .word {
-    margin-left: -210px;
+    flex-direction: row;
   }
 
   .case {
-    flex: 0 0 210px;
+
   }
 
   .entries {
-    margin-left: -20px;
+    flex-direction: row;
+  }
+
+  .entries.vertical {
+    flex-direction: column;
   }
 }

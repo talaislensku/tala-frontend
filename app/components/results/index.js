@@ -38,11 +38,16 @@ const Results = ({ t, result, current, setCurrentForm, listByTag }) => {
     [styles.alternate]: word.grammarTag.endsWith('2'),
   })
 
+  const entriesClasses = classNames({
+    [styles.entries]: true,
+    [styles.vertical]: visible.length > 3
+  })
+
   return (
     <div>
       {visible &&
         <div>
-          <div className={styles.entries}>
+          <div className={entriesClasses}>
             {visible.map(x => (
               <div key={x.grammarTag} className={wordClasses(x)} onClick={setCurrentForm.bind(null, x, result)}>
                 <div className={styles.case}>{listByTag === 'person' ? pronounify(x.grammarTag) : x.tags[listByTag]}</div>
