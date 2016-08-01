@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../main/main.css'
+import styles from './results.css'
 import classNames from 'classnames'
 import Links from '../links'
 import pronounify from '../../lib/pronounify'

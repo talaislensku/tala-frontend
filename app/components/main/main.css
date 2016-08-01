@@ -53,45 +53,6 @@ body {
   margin-bottom: .5em;
 }
 
-.word {
-  padding: 5px 0;
-  display: flex;
-  flex-flow: row nowrap;
-  cursor: pointer;
-  padding-left: 20px;
-  margin-left: -20px;
-  margin-right: -20px;
-  padding-right: 20px;
-}
-
-.word:hover {
-  background-color: color($blue a(10%));
-}
-
-.wordMatch, .wordMatch:hover {
-  background-color: $blue;
-  color: white;
-}
-
-.case {
-  flex: 0 0 50%;
-  font-weight: 700;
-  padding-right: 20px;
-  text-align: right;
-}
-
-.wordMatch .case {
-  background-color: $blue;
-}
-
-.alternate .case {
-  color: transparent;
-}
-
-.entries {
-  margin: 1em 0;
-}
-
 .headWord {
   font-size: 2rem;
 }
@@ -109,19 +70,7 @@ body {
     font-size: 2.5rem;
   }
 
-  .word {
-    margin-left: -210px;
-  }
-
-  .case {
-    flex: 0 0 210px;
-  }
-
   .links {
     text-align: right;
-  }
-
-  .entries {
-    margin-left: -20px;
   }
 }
