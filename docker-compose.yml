@@ -3,10 +3,20 @@ version: '2'
 services:
   web:
     image: 'davidblurton/tala-new:latest'
-    expose:
-      - 8080
-
+    
   api:
     image: 'davidblurton/tala-api:latest'
     expose:
       - 8000
+
+  proxy:
+    image: 'dockercloud/haproxy:latest'
+    links:
+      - api
+      - web
+    ports:
+      - '80:80'
+      - '443:443'
+      - '1936:1936'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'

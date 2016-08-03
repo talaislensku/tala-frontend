@@ -8,7 +8,7 @@ COPY package.json $HOME/
 WORKDIR $HOME
 RUN npm install
 
-ADD . $HOME
+COPY . $HOME
 
 EXPOSE 8080
 

@@ -5,10 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.development
-    depends_on:
-      - proxy
+    expose:
+      - 8080
     environment:
-      - VIRTUAL_HOST=tala.dev # For nginx proxy
+      - VIRTUAL_HOST=tala.dev
     volumes:
       - .:/code
       - /code/node_modules
@@ -16,18 +16,8 @@ services:
   api:
     build: ../tala-api/.
     command: npm run dev
-    depends_on:
-      - proxy
     environment:
-      - VIRTUAL_HOST=api.tala.dev # For nginx proxy
+      - VIRTUAL_HOST=api.tala.dev
     volumes:
       - ../tala-api/.:/code
       - /code/node_modules
-
-  proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-    ports:
-      - "80:80"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
