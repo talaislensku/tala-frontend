@@ -39,7 +39,7 @@ const getResultsOrSuggestions = mostRecent(async (query, lang) => {
 export function lookupWord() {
   return async (dispatch, getState) => {
     const { lang } = getState()
-    let { query, tag, id } = getState().location
+    const { query, tag, id } = getState().location
 
     if (!query) {
       dispatch({
@@ -51,26 +51,33 @@ export function lookupWord() {
 
     dispatch({ type: START_LOADING })
 
-    const {
-      correctedQuery,
-      words,
-      corrections,
-      suggestions,
-    } = await getResultsOrSuggestions(query, lang)
+    try {
+      const {
+        correctedQuery,
+        words,
+        corrections,
+        suggestions,
+      } = await getResultsOrSuggestions(query, lang)
 
-    dispatch({
-      type: LOOKUP_SUGGESTIONS,
-      corrections,
-      suggestions,
-    })
+      dispatch({
+        type: LOOKUP_SUGGESTIONS,
+        corrections,
+        suggestions,
+      })
 
-    dispatch({
-      type: LOOKUP_WORD,
-      data: words,
-      query: correctedQuery || query,
-      id,
-      tag,
-    })
+      dispatch({
+        type: LOOKUP_WORD,
+        data: words,
+        query: correctedQuery || query,
+        id,
+        tag,
+      })
+    } catch (error) {
+      dispatch({
+        type: LOOKUP_WORD,
+        error,
+      })
+    }
 
     dispatch({ type: STOP_LOADING })
   }

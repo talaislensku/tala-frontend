@@ -8,15 +8,17 @@ import { setFilter } from '../../action-creators/filter'
 import { lookupCases } from '../../action-creators/cases'
 
 import styles from './main.css'
-import Results from '../results'
+
+import Cases from '../cases'
+import Error from '../error'
+import Filter from '../filter'
+import Footer from '../footer'
 import LanguagePicker from '../language-picker'
+import Loader from '../loader'
+import Logo from '../logo'
+import Results from '../results'
 import SeeAlso from '../see-also'
 import Suggestions from '../suggestions'
-import Logo from '../logo'
-import Loader from '../loader'
-import Footer from '../footer'
-import Cases from '../cases'
-import Filter from '../filter'
 import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
@@ -107,7 +109,7 @@ class Main extends React.Component {
   }
 
   render() {
-    const { location, lang, suggestions, loading, filter, cases } = this.props
+    const { location, lang, suggestions, loading, filter, cases, error } = this.props
     const { query } = location
     const { result, current, otherMatches } = this.props.word
 
@@ -130,14 +132,16 @@ class Main extends React.Component {
               autoCapitalize="none"
             />
             <Loader loading={loading} />
-            {result && <div>
+            <Error error={error} />
+
+            {!error && result && <div>
               <span className={styles.headWord}>{result.headWord}</span>
               <span className={styles.wordClass}>{result.wordClass}</span>
 
               <Cases cases={cases} headWord={result.headWord} />
             </div>}
 
-            {query && <div>
+            {!error && query && <div>
               {current && current.tags && <Filter listByTag={listByTag} tags={current.tags} setFilter={this.setFilter} />}
               <Results listByTag={listByTag} result={result} current={current} setCurrentForm={this.setCurrentForm} />
               <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
@@ -153,5 +157,5 @@ class Main extends React.Component {
   }
 }
 
-export default connect(({ word, suggestions, lang, location, loading, filter, cases }) =>
-  ({ word, suggestions, lang, location, loading, filter, cases }))(Main)
+export default connect(({ word, suggestions, lang, location, loading, filter, cases, error }) =>
+  ({ word, suggestions, lang, location, loading, filter, cases, error }))(Main)
