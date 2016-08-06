@@ -26,6 +26,7 @@ const initialState = {
     query: decodeURIComponent(currentLocation.pathname.replace('/', '')),
     id: currentLocation.query.id,
     tag: currentLocation.query.tag,
+    filter: currentLocation.query.filter,
   },
 }
 

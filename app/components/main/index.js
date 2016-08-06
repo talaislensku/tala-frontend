@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { changeLanguage } from '../../action-creators/lang'
 import { changeRoute } from '../../action-creators/location'
 import { lookupWord, selectWord } from '../../action-creators/word'
-import { setFilter } from '../../action-creators/filter'
 import { lookupCases } from '../../action-creators/cases'
 
 import styles from './main.css'
@@ -100,7 +99,8 @@ class Main extends React.Component {
   }
 
   setFilter = (tag) => {
-    this.props.dispatch(setFilter(tag))
+    const { dispatch, location } = this.props
+    dispatch(changeRoute(location.query, { filter: tag }))
   }
 
   queryChanged = (event) => {
@@ -109,8 +109,8 @@ class Main extends React.Component {
   }
 
   render() {
-    const { location, lang, suggestions, loading, filter, cases, error } = this.props
-    const { query } = location
+    const { location, lang, suggestions, loading, cases, error } = this.props
+    const { query, filter } = location
     const { result, current, otherMatches } = this.props.word
 
     const t = translations[lang]

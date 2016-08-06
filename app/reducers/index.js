@@ -1,6 +1,5 @@
 export cases from './cases'
 export error from './error'
-export filter from './filter'
 export lang from './lang'
 export loading from './loading'
 export location from './location'

@@ -4,16 +4,24 @@ import { createHistory, useQueries } from 'history'
 const history = useQueries(createHistory)()
 
 export function changeRoute(pathname, params = {}) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const { location } = getState()
+    const { query, ...prevParams } = location
+
+    const nextParams = {
+      ...prevParams,
+      ...params,
+    }
+
     history.replace({
       pathname,
-      query: params,
+      query: nextParams,
     })
 
     dispatch({
       type: CHANGE_ROUTE,
       pathname,
-      params,
+      params: nextParams,
     })
   }
 }
