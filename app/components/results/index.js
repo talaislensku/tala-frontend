@@ -7,10 +7,10 @@ import { translate } from 'react-translate'
 
 const isVerb = word => word.wordClass === 'Verb' || word.wordClass === 'sagnorð'
 
-function getVisible(listByTag, tags, forms) {
-  let otherTags = Object.keys(tags).filter(x => x !== listByTag)
+function getVisible(currentFilter, tags, forms) {
+  let otherTags = Object.keys(tags).filter(x => x !== currentFilter)
 
-  if (listByTag === 'person') {
+  if (currentFilter === 'person') {
     otherTags = otherTags.filter(x => x !== 'number')
   }
 
@@ -21,7 +21,7 @@ function getVisible(listByTag, tags, forms) {
   return visible
 }
 
-const Results = ({ t, result, current, setCurrentForm, listByTag }) => {
+const Results = ({ t, result, current, setCurrentForm, currentFilter }) => {
   if (!result) {
     return <div>{t('no-results')}</div>
   }
@@ -30,7 +30,7 @@ const Results = ({ t, result, current, setCurrentForm, listByTag }) => {
     return <div>{t('no-alternate-forms')}</div>
   }
 
-  const visible = getVisible(listByTag, current.tags, result.forms)
+  const visible = getVisible(currentFilter, current.tags, result.forms)
 
   const wordClasses = word => classNames({
     [styles.word]: true,
@@ -50,7 +50,7 @@ const Results = ({ t, result, current, setCurrentForm, listByTag }) => {
           <div className={entriesClasses}>
             {visible.map(x => (
               <div key={x.grammarTag} className={wordClasses(x)} onClick={setCurrentForm.bind(null, x, result)}>
-                <div className={styles.case}>{listByTag === 'person' ? pronounify(x.grammarTag) : x.tags[listByTag]}</div>
+                <div className={styles.case}>{currentFilter === 'person' ? pronounify(x.grammarTag) : x.tags[currentFilter]}</div>
                 <div className={styles.wordForm}>{x.form}</div>
               </div>
             ))}
@@ -62,7 +62,7 @@ const Results = ({ t, result, current, setCurrentForm, listByTag }) => {
           : null}
 
           <Links
-            listByTag={listByTag}
+            currentFilter={currentFilter}
             result={result}
             current={current}
             setCurrentForm={setCurrentForm}
@@ -77,6 +77,7 @@ Results.propTypes = {
   t: React.PropTypes.func,
   result: React.PropTypes.object,
   current: React.PropTypes.object,
+  currentFilter: React.PropTypes.string,
   setCurrentForm: React.PropTypes.func.isRequired,
 }
 

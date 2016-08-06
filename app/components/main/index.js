@@ -23,18 +23,18 @@ import translations from '../../../translations.yaml'
 
 const isMobile = 'ontouchstart' in window
 
-function getListByTag(filter, currentTags) {
+function getCurrentFilter(filter, currentTags) {
   const tags = Object.keys(currentTags)
 
   if (tags.includes(filter)) {
     return filter
   }
 
-  const listByTag = tags.includes('grammarCase') ? 'grammarCase' :
+  const currentFilter = tags.includes('grammarCase') ? 'grammarCase' :
                     tags.includes('person') ? 'person' :
                     tags.includes('degree') ? 'degree' : null
 
-  return listByTag
+  return currentFilter
 }
 
 class Main extends React.Component {
@@ -115,7 +115,7 @@ class Main extends React.Component {
 
     const t = translations[lang]
 
-    const listByTag = current && current.tags && getListByTag(filter, current.tags)
+    const currentFilter = current && current.tags && getCurrentFilter(filter, current.tags)
 
     return (
       <TranslatorProvider translations={t}>
@@ -142,8 +142,8 @@ class Main extends React.Component {
             </div>}
 
             {!error && query && <div>
-              {current && current.tags && <Filter listByTag={listByTag} tags={current.tags} setFilter={this.setFilter} />}
-              <Results listByTag={listByTag} result={result} current={current} setCurrentForm={this.setCurrentForm} />
+              {current && current.tags && <Filter currentFilter={currentFilter} tags={current.tags} setFilter={this.setFilter} />}
+              <Results currentFilter={currentFilter} result={result} current={current} setCurrentForm={this.setCurrentForm} />
               <SeeAlso result={result} otherMatches={otherMatches} setCurrent={this.setCurrent} />
               <Suggestions suggestions={suggestions} navigate={this.setSuggestion} />
             </div>}
