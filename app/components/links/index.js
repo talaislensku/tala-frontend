@@ -1,16 +1,16 @@
 import React from 'react'
 import styles from './links.css'
 
-const Links = ({ result, current, setCurrentForm, listByTag }) => {
+const Links = ({ result, current, setCurrentForm, currentFilter }) => {
   if (!(result && current && result.forms.length)) {
     return <div />
   }
 
   const tags = Object.keys(current.tags)
 
-  let linkTags = tags.filter(x => x !== listByTag)
+  let linkTags = tags.filter(x => x !== currentFilter)
 
-  if (listByTag === 'person') {
+  if (currentFilter === 'person') {
     linkTags = linkTags.filter(x => x !== 'number')
   }
 
@@ -45,6 +45,7 @@ const Links = ({ result, current, setCurrentForm, listByTag }) => {
 Links.propTypes = {
   result: React.PropTypes.object,
   current: React.PropTypes.object,
+  currentFilter: React.PropTypes.string,
   setCurrentForm: React.PropTypes.func.isRequired,
 }
 
