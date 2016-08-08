@@ -3,7 +3,9 @@ version: '2'
 services:
   web:
     image: 'davidblurton/tala-new:latest'
-    
+    expose:
+      - 80
+
   api:
     image: 'davidblurton/tala-api:latest'
     expose:

@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  web:
+  web-dev:
     build:
       context: .
       dockerfile: Dockerfile.development
@@ -9,6 +9,16 @@ services:
       - 8080
     environment:
       - VIRTUAL_HOST=tala.dev
+    volumes:
+      - .:/code
+      - /code/node_modules
+
+  web:
+    build: .
+    expose:
+      - 80
+    environment:
+      - VIRTUAL_HOST=staging.tala.dev
     volumes:
       - .:/code
       - /code/node_modules
@@ -21,3 +31,9 @@ services:
     volumes:
       - ../tala-api/.:/code
       - /code/node_modules
+
+  proxy:
+    links:
+      - web-dev
+      - web
+      - api
