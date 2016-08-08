@@ -40,7 +40,7 @@ const Results = ({ t, result, current, setCurrentForm, currentFilter }) => {
 
   const entriesClasses = classNames({
     [styles.entries]: true,
-    [styles.vertical]: visible.length > 3
+    [styles.vertical]: currentFilter === 'grammarCase' || visible.length > 3
   })
 
   return (
