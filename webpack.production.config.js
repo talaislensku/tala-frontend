@@ -43,19 +43,20 @@ module.exports = {
     require('postcss-simple-vars')({variables: brand}),
     require('postcss-color-function'),
     require('postcss-calc'),
-    require('postcss-assets')
+    require('postcss-assets'),
   ],
 
   plugins: [
+    new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') }),
     new HtmlWebpackPlugin({
       title: 'tala.is',
       template: 'index.html',
       inject: 'body',
-      filename: '../index.html'
+      filename: '../index.html',
     }),
     new ExtractTextPlugin('styles.[chunkhash].css', { allChunks: true }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.[chunkhash].js'),
-    new webpack.optimize.UglifyJsPlugin()
-  ]
-};
+    new webpack.optimize.UglifyJsPlugin(),
+  ],
+}
