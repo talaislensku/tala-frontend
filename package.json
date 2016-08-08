@@ -51,6 +51,7 @@
     "history": "^3.0.0",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
+    "react-fastclick": "^2.1.2",
     "react-redux": "^4.4.5",
     "react-translate": "^3.0.4",
     "redux": "^3.5.2",
