@@ -3,12 +3,13 @@ FROM node:6
 ENV HOME=/code
 ENV NPM_CONFIG_LOGLEVEL warn
 
-COPY package.json $HOME/
+COPY package.json npm-shrinkwrap.json $HOME/
 
 WORKDIR $HOME
+
 RUN npm install
 
-COPY . $HOME
+COPY . $HOME/
 
 EXPOSE 8080
 
