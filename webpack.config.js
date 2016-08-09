@@ -12,8 +12,8 @@ module.exports = {
     app: [
       'webpack-dev-server/client?http://tala.dev',
       'webpack/hot/only-dev-server',
-      path.resolve(__dirname, './app/index.js')
-    ]
+      path.resolve(__dirname, './app/index.js'),
+    ],
   },
 
   output: {
@@ -30,23 +30,23 @@ module.exports = {
         loaders: ['react-hot', 'babel'],
       }, {
         test: /\.css$/,
-        loader: 'style-loader!' + cssModulesLoader
+        loader: 'style-loader!' + cssModulesLoader,
       }, {
         test: /\.yaml$/,
-        loader: 'json-loader!yaml-loader'
+        loader: 'json-loader!yaml-loader',
       }, {
         test: /\.svg$/,
-        loader: 'file-loader'
-      }
+        loader: 'file-loader',
+      },
     ],
   },
 
   postcss: [
     require('autoprefixer'),
-    require('postcss-simple-vars')({variables: brand}),
+    require('postcss-simple-vars')({ variables: brand }),
     require('postcss-color-function'),
     require('postcss-calc'),
-    require('postcss-assets')
+    require('postcss-assets'),
   ],
 
   plugins: [
@@ -55,12 +55,21 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'tala.is',
       template: 'index.dev.html',
-      inject: 'body'
-    })
+      inject: 'body',
+    }),
   ],
 
   devServer: {
     host: '0.0.0.0',
     historyApiFallback: true,
-  }
-};
+    stats: {
+      assets: false,
+      colors: true,
+      version: false,
+      hash: false,
+      timings: true,
+      chunks: false,
+      chunkModules: false,
+    },
+  },
+}
