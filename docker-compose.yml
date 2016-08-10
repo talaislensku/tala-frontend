@@ -1,21 +1,39 @@
 version: '2'
 
 services:
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    expose:
+      - 8080
+    environment:
+      - VIRTUAL_HOST=tala.dev
+    volumes:
+      - .:/code
+      - /code/node_modules
+
   web:
-    image: 'davidblurton/tala-new:latest'
+    build: .
+    environment:
+      - VIRTUAL_HOST=staging.tala.dev
     expose:
       - 80
+    volumes:
+      - .:/code
+      - /code/node_modules
 
   api:
     image: 'davidblurton/tala-api:latest'
-    expose:
-      - 8000
+    environment:
+      - VIRTUAL_HOST=api.tala.dev
 
   proxy:
     image: 'dockercloud/haproxy:latest'
     links:
       - api
       - web
+      - web-dev
     ports:
       - '80:80'
       - '443:443'
