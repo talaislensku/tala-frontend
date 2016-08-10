@@ -3,6 +3,7 @@ var path = require('path')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var brand = require('./app/brand')
+var AppCachePlugin = require('appcache-webpack-plugin');
 
 var cssModulesLoader = 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
 
@@ -15,7 +16,7 @@ module.exports = {
   output: {
     filename: '[name].[chunkhash].js',
     path: path.join(__dirname, 'build', 'assets'),
-    publicPath: '/assets',
+    publicPath: '/assets/',
     devtool: 'source-map'
   },
 
@@ -58,5 +59,8 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.[chunkhash].js'),
     new webpack.optimize.UglifyJsPlugin(),
+    new AppCachePlugin({
+      output: '../manifest.appcache'
+    })
   ],
 }
